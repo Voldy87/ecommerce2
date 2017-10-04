@@ -61,7 +61,7 @@ function ItemDAO(database) {
         //categories.push(category)
 
         // TODO-lab1A Replace all code above (in this method).
-        this.db.collection("item").aggregate( [{$unwind:"$items"},{$project:{"items.category":1,_id:0}}, {$group:{_id:"$items.category",num:{$sum:1}}}, {$sort:{ _id:1}}]).toArray(function(err, categories) {
+        this.db.collection("item").aggregate( [{$project:{"category":1,_id:0}}, {$group:{_id:"$category",num:{$sum:1}}}, {$sort:{ _id:1}}]).toArray(function(err, categories) {
             assert.equal(null, err);
             var total = 0;
             for (var i=0; i<categories.length; i++) {
@@ -69,7 +69,7 @@ function ItemDAO(database) {
             }
             var item = {"_id":"All", "num":total};
             categories.splice(0,0,item);
-        console.log(categories);
+        //console.log("categories");
             callback(categories);
         });
         // TODO Include the following line in the appropriate
@@ -104,18 +104,31 @@ function ItemDAO(database) {
          *
          */
 
-        var pageItem = this.createDummyItem();
+        /*var pageItem = this.createDummyItem();
         var pageItems = [];
         for (var i=0; i<5; i++) {
             pageItems.push(pageItem);
-        }
-
+        }*/
+        var categoryFindFilter;
+        if (category=="All")
+            categoryFindFilter={};
+        else 
+             categoryFindFilter={"category":category};
         // TODO-lab1B Replace all code above (in this method).
+        var cursor = this.db.collection('item').find(categoryFindFilter);
+        cursor.skip(page*itemsPerPage);
+        cursor.limit(itemsPerPage);
+        cursor.sort({"_id":1});
+        cursor.toArray(function(err, pageItems) {
+        //console.log(pageItems);
+            assert.equal(null, err);
+            callback(pageItems);
+        });
 
         // TODO Include the following line in the appropriate
         // place within your code to pass the items for the selected page
         // to the callback.
-        callback(pageItems);
+        //
     }
 
 
@@ -138,10 +151,19 @@ function ItemDAO(database) {
          * of a call to the getNumItems() method.
          *
          */
-
+        var categoryFindFilter;
+        if (category=="All")
+            categoryFindFilter={};
+        else 
+             categoryFindFilter={"category":category};        
+        this.db.collection('item').find(categoryFindFilter).count(function(err, numItems) {
+        //console.log(pageItems);
+            assert.equal(null, err);
+            callback(numItems);
+        });
          // TODO Include the following line in the appropriate
          // place within your code to pass the count to the callback.
-        callback(numItems);
+        //callback(numItems);
     }
 
 
