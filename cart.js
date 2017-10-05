@@ -38,19 +38,32 @@ function CartDAO(database) {
         *
         */
 
-        var userCart = {
+       /* var userCart = {
             userId: userId,
             items: []
         }
         var dummyItem = this.createDummyItem();
-        userCart.items.push(dummyItem);
+        userCart.items.push(dummyItem);*/
+        this.db.collection("cart").find({"userId": userId}).toArray(function(err, item) {
+                assert.equal(null, err);
+                var userCart = null;
+                if (item.length > 0)
+                    userCart = item[0];
+                callback(userCart);
+            });
+        // This could also be implemented in this mode:
+ /*   this.db.collection("cart").find({userId: userId}).limit(1).next(function(err, doc) {
+        assert.equal(null, err);
+        assert.ok(doc);
 
+        callback(doc);
+    });*/
         // TODO-lab5 Replace all code above (in this method).
 
         // TODO Include the following line in the appropriate
         // place within your code to pass the userCart to the
         // callback.
-        callback(userCart);
+        //callback(userCart);
     }
 
 
@@ -81,8 +94,26 @@ function CartDAO(database) {
          * how cart.itemInCart is used in the mongomart.js app.
          *
          */
-
-        callback(null);
+         this.db.collection("cart").find({"userId": userId, "items._id":itemId}, {"items.$":1,"_id":0}).toArray(function(err,arr){
+            if (arr.length>0)
+                callback(arr[0]);
+            else
+                callback(null);
+         });
+        //callback(null);
+        //other sol:
+        /*this.db.collection("cart")
+        .find({userId: userId, "items._id": itemId}, {"items.$": 1})
+        .limit(1)
+        .next(function(err, item) {
+            assert.equal(null, err);
+            console.log(err);
+            if (item != null) {
+                item = item.items[0];
+            }
+            console.log(item);
+            callback(item);
+        });*/
 
         // TODO-lab6 Replace all code above (in this method).
     }
@@ -173,7 +204,21 @@ function CartDAO(database) {
         * https://docs.mongodb.org/manual/reference/operator/update/positional/
         *
         */
+         var updateDoc = {};
 
+        if (quantity == 0) 
+            updateDoc = { "$pull": { items: { _id: itemId } } };
+        else 
+            updateDoc = { "$set": { "items.$.quantity": quantity } };
+        this.db.collection("cart").findOneAndUpdate(
+            { userId: userId, "items._id": itemId },
+            updateDoc,
+            { returnOriginal: false },
+            function(err, result) {
+                assert.equal(null, err);
+                callback(result.value);
+        });
+        /*
         var userCart = {
             userId: userId,
             items: []
@@ -182,12 +227,12 @@ function CartDAO(database) {
         dummyItem.quantity = quantity;
         userCart.items.push(dummyItem);
         callback(userCart);
-
+        */
         // TODO-lab7 Replace all code above (in this method).
 
     }
 
-    this.createDummyItem = function() {
+    /*this.createDummyItem = function() {
         "use strict";
 
         var item = {
@@ -204,7 +249,7 @@ function CartDAO(database) {
         };
 
         return item;
-    }
+    }*/
 
 }
 
