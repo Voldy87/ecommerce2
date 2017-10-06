@@ -6,7 +6,6 @@
   You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
-
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +22,6 @@ var express = require('express'),
     ItemDAO = require('./items').ItemDAO,
     CartDAO = require('./cart').CartDAO;
     
-
 // Set up express
 app = express();
 app.set('view engine', 'html');
@@ -32,7 +30,7 @@ app.use('/static', express.static(__dirname + '/static'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-/*
+/* 
  Configure nunjucks to work with express
  Not using consolidate because I'm waiting on better support for template inheritance with
  nunjucks via consolidate. See: https://github.com/tj/consolidate.js/pull/224
@@ -48,7 +46,7 @@ env.addFilter("date", nunjucksDate);
 
 var ITEMS_PER_PAGE = 5;
 
-// Hardcoded USERID for use with the shopping cart portion
+// Hardcoded USERID for use with the shopping cart portion  
 var USERID = "558098a65133816958968d88";
 
 MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
@@ -93,7 +91,6 @@ MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
         });
     });
 
-    
     router.get("/search", function(req, res) {
         "use strict";
 
@@ -133,7 +130,7 @@ MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
                 res.status(404).send("Item not found.");
                 return;
             }
-            
+             
             var stars = 0;
             var numReviews = 0;
             var reviews = [];
@@ -266,7 +263,7 @@ MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
         });
     });
     
-
+ 
     function cartTotal(userCart) {
         "use strict";
 
@@ -279,14 +276,63 @@ MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
         return total;
     }
 
-    
-    // Use the router routes in our application
-    app.use('/', router);
+   router.get("/location", function(req, res) {
+        "use strict";
+        var page = req.query.page ? parseInt(req.query.page) : 0;
+        var query = req.query.query ? req.query.query : "";/*
+        stores.searchStores(query, page, STORES_PER_PAGE, function(searchStores) {
+            stores.getNumSearchStores(query, function(itemCount) {
+                var numPages = 0;
+                if (storeCount > STORES_PER_PAGE) {
+                    numPages = Math.ceil(itemCount / STORES_PER_PAGE);
+                }*/
+                res.render('locations', { 
+                    zip_error:"eeeeee",
+                    city_and_state_error:"sssss",  
+                    stores:{},
+                    pages:1, 
+                    num_stores:0,
+                    states:{}
+               });
+           /* });
+        });*/
+    });
 
-    // Start the server listening
-    var server = app.listen(3000, function() {
+
+   /* router.get("/stores/:storeId", function(req, res) {
+        "use strict";
+        var storeId = parseInt(req.params.storeId);
+        items.getItem(storeId, function(store) {
+            console.log(store);
+            if (store == null) {
+                res.status(404).send("Store not found.");
+                return;
+            }
+            var stars = 0;
+            var numReviews = 0;
+            var reviews = [];
+            if ("reviews" in store) {
+                numReviews = store.reviews.length;
+                for (var i=0; i<numReviews; i++) {
+                    var review = store.reviews[i];
+                    stars += review.stars;
+                }
+                if (numReviews > 0) {
+                    stars = stars / numReviews;
+                    reviews = store.reviews;
+                }
+            }
+
+        });
+    });*/
+
+    
+    app.use('/', router); // Use the router routes in our application
+
+    
+    var server = app.listen(3000, function() { // Start the server listening
         var port = server.address().port;
-        console.log('Mongomart server listening on port %s.', port);
+        console.log('Unreal Mart NodeJS server is listening on port %s.', port);
     });
 
 });

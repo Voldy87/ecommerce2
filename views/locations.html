@@ -11,7 +11,7 @@
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
 
-    <title>MongoMart - Locations</title>
+    <title>Unreal Mart - Locations</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -30,11 +30,10 @@
 
 <body>
 
-% # Include navigation
-%include('includes/nav.tpl')
+    {% include "includes/nav.html" %}  
 
-<!-- Page Content -->
-<div class="container">
+
+<div class="container"> <!-- Page Content -->
 
     <div class="row">
         <div class="col-md-12">
@@ -44,17 +43,16 @@
             </ol>
         </div>
     </div>
-    <!-- /.row -->
 
-    <div class="row">
+    <div class="row">   
         <div class="col-md-12">
-            <h2>Store Locator</h2>
-            <p>Find the store closest to you.</p>
-            % if zip_error:
+            <h2>Store Finder</h2>
+            <p>Find the Unreal Mart store closest to you.</p>
+            {% if zip_error %}
             <div class="alert alert-danger">
                 {{zip_error}}
             </div>
-            % end
+            {% endif %}
             <form class="form">
                 <div class="form-group{{' has-error' if zip_error else ''}}">
                     <label class="control-label" for="zip">Zip code</label>
@@ -65,11 +63,11 @@
                     <button type="submit" class="btn btn-primary">Find stores by zip</button>
                 </div>
             </form>
-            % if city_and_state_error:
+            {% if city_and_state_error %}
             <div class="alert alert-danger">
                  {{city_and_state_error}}
             </div>
-            % end
+            {% endif %}
             <form class="form">
                 <div class="form-group<#if cityAndStateError??> has-error</#if>">
                     <label class="control-label" for="city">City</label>
@@ -79,81 +77,82 @@
                     <label for="state">State</label>
                     <select class="form-control" name="state" id="state">
                       <option>Choose one</option>
-                      % for st in states:
-                      % if st == state:
+                      {% for st in states %}
+                      {% if st == state %}
                         <option value="{{st}}" selected>{{st}}</option>
-                      % else:
+                      {% else %}
                       <option value="{{st}}">{{st}}</option>
-                      % end
-                      % end
+                      {% endif %}
+                      {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
                     <input type="hidden" name="find" value="byCityAndState"/>
-                    <button type="submit" class="btn btn-primary">Find stores by city &amp; state</button>
+                    <button type="submit" class="btn btn-primary">Find stores by city &amp; state
+                    </button>
                 </div>
             </form>
 
-
-            <!-- row -->
-            % for store in stores:
-
+            {% for store in stores %}
             <div class="row">
                 <div class="col-md-12">
                     <h3>{{store['name']}}</h3>
                     <address>
                         <strong>{{store['name']}}</strong><br/>
                         {{store['address']}}<br/>
-                        % if store['address2']:
+                        {% if store['address2'] %}
                         {{store['address2']}}<br/>
-                        % end
+                        {% endif %}
                         {{store['city']}}, {{store['state']}} {{store['zip']}}<br/>
                         {{store['country']}}<br/>
                     </address>
-                    <!-- only show distance for zip searches -->
-                    % if find == "byZip":
+                    {% if find == "byZip" %} 
                     <strong>Distance: {{store['distance_from_point']}} km</strong>
-                    % end
+                    {% endif %}
                 </div>
             </div>
-            <!-- /.row -->
 
             <hr/>
 
-            % end
-            <!-- /.row -->
+            {% endfor %} 
 
-            % if len(stores) > 0:
-            <!-- Pagination -->
+            {% if num_stores> 0 %}
+            Pagination 
             <div class="row text-center">
                 <div class="col-lg-12">
                     <ul class="pagination">
-                    % for i in xrange(num_pages):
+                    {% for i in xrange(num_pages) %}
                         <li {{'class="active"' if page == i else ''}}>
                             <a href="?page={{i}}&amp;city={{city}}&amp;state={{state}}&amp;zip={{zip}}&amp;find={{find}}">{{i+1}}</a>
                         </li>
-                    % end
+                    {% endfor %}
                     </ul>
                 </div>
             </div>
-            % end
+           {% endif %}
+
+            <div class="row text-center">
+                <div class="col-lg-12">
+                    <ul class="pagination">
+                        {% for i in range(pages) %}
+                            <li class={{"active" if page == i else "inactive"}}>
+                                <a href="/locations?page={{i}}&query={{queryString}}">{{i + 1}}</a>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div> 
 
             <div style="text-align:center;">
                 <i>{{num_stores}} Stores</i>
-            </div>
-
-            <!-- /.row -->
+            </div> 
         </div>
-
-
-
     </div>
-
 </div>
-<!-- /.container -->
 
-% # Include footer
-%include('includes/footer.tpl')
+
+{% include('includes/footer.html') %}
 
 </body>
 
