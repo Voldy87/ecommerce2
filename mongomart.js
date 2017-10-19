@@ -1,50 +1,52 @@
-/*
-  Copyright (c) 2008 - 2016 MongoDB, Inc. <http://mongodb.com>
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-*/
+/** 
+ *  @fileOverview Main Node application
+ *
+ *  @author       Andrea Orlandi
+ *
+ *  @requires     NPM:express, bodyParser, consolidate, mongodb, assert
+ *  @requires     INTERNAL: cart.js, item.js, store,js
+ */
 
 
 var express = require('express'),
     bodyParser = require('body-parser'),
+    //engine = require('consolidate'),
     nunjucks = require('nunjucks'),
     MongoClient = require('mongodb').MongoClient,
     assert = require('assert'),
     ItemDAO = require('./items').ItemDAO,
-    CartDAO = require('./cart').CartDAO;
+    CartDAO = require('./cart').CartDAO,
+    StoreDAO = require('./stores').StoreDAO;
     
 // Set up express
 app = express();
+// set .html as the default extension
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
+
 app.use('/static', express.static(__dirname + '/static'));
 app.use(bodyParser.urlencoded({ extended: true }));
+/*
+app.engine('pug', engines.pug);
+app.engine('mustache', engines.mustache);
+app.engine('njk', engines.nunjucks);*/
 
 
 /* 
- Configure nunjucks to work with express
- Not using consolidate because I'm waiting on better support for template inheritance with
+ Configure nunjucks to work with express.  Not using consolidate because I'm waiting on better support for template inheritance with
  nunjucks via consolidate. See: https://github.com/tj/consolidate.js/pull/224
 */
 var env = nunjucks.configure('views', {
     autoescape: true,
     express: app
 });
-
 var nunjucksDate = require('nunjucks-date');
 nunjucksDate.setDefaultFormat('MMMM Do YYYY, h:mm:ss a');
 env.addFilter("date", nunjucksDate);
 
+
 var ITEMS_PER_PAGE = 5;
+
 
 // Hardcoded USERID for use with the shopping cart portion  
 var USERID = "558098a65133816958968d88";
@@ -57,7 +59,8 @@ MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
 
     var items = new ItemDAO(db);
     var cart = new CartDAO(db);
-    
+    var store = new StoreDAO(db);
+
     var router = express.Router();
 
     // Homepage
