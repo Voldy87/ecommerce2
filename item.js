@@ -19,12 +19,17 @@ var MongoClient = require('mongodb').MongoClient,
     assert = require('assert');
 
 
-function ItemDAO(database) {
+function ItemDAO(database) { // item object class prototypes (1 var member, others functions)
     "use strict";
+
     this.db = database;
+    
     this.getCategories = function(callback) {
         "use strict";
-        this.db.collection("item").aggregate( [{$project:{"category":1,_id:0}}, {$group:{_id:"$category",num:{$sum:1}}}, {$sort:{ _id:1}}]).toArray(function(err, categories) {
+        var project = {"$project":{"category":1,"_id":0}},
+            group = {"$group":{"_id":"$category","num":{"$sum":1}}},
+            sort = {"$sort":{ "_id":1}};
+        this.db.collection("item").aggregate( [project,group,sort]).toArray(function(err, categories) {
             assert.equal(null, err);
             var total = 0;
             for (var i=0; i<categories.length; i++)
@@ -94,7 +99,7 @@ function ItemDAO(database) {
          * this method, create a SINGLE text index on title, slogan, and
          * description. You should simply do this in the mongo shell.
          * db.item.createIndex({title:"text",slogan:"text",description:"text"})
-         *
+         * 
          */
 
        /* var item = this.createDummyItem();

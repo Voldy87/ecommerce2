@@ -1,41 +1,43 @@
 /** 
- *  @fileOverview Main Node application
+ *  @fileOverview Main Node/Express application
  *
  *  @author       Andrea Orlandi
- *
- *  @requires     NPM:express, bodyParser, consolidate, mongodb, assert
- *  @requires     INTERNAL: cart.js, item.js, store,js
+ * 
+ *  @requires     NPM: express, bodyParser, consolidate, mongodb, assert, engines
+ *  @requires     INTERNAL: cart.js, item.js, stores.js
  */
-
 
 var express = require('express'),
     bodyParser = require('body-parser'),
-    //engine = require('consolidate'),
+    engines = require('consolidate'),
     nunjucks = require('nunjucks'),
     MongoClient = require('mongodb').MongoClient,
     assert = require('assert'),
-    ItemDAO = require('./items').ItemDAO,
+    //one DAO for each collection
+    ItemDAO = require('./item').ItemDAO,
     CartDAO = require('./cart').CartDAO,
-    StoreDAO = require('./stores').StoreDAO;
+    StoreDAO = require('./store').StoreDAO;
     
 // Set up express
 app = express();
 // set .html as the default extension
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
-
+//serve static (c-side tecj as js,html,css) file, i.e. w/out nodejs serv-side elaboration (routing, etc.)
 app.use('/static', express.static(__dirname + '/static'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
-/*
-app.engine('pug', engines.pug);
+// assign the various engines to different extensions files
+app.engine('html', engines.nunjucks);
+app.engine('handlebars', engines.handlebars);
 app.engine('mustache', engines.mustache);
-app.engine('njk', engines.nunjucks);*/
+app.engine('pug', engines.pug);
+app.engine('underscore', engines.underscore);
 
 
-/* 
- Configure nunjucks to work with express.  Not using consolidate because I'm waiting on better support for template inheritance with
- nunjucks via consolidate. See: https://github.com/tj/consolidate.js/pull/224
-*/
+//https://github.com/tj/consolidate.js/pull/224
+
+
 var env = nunjucks.configure('views', {
     autoescape: true,
     express: app
@@ -48,30 +50,38 @@ env.addFilter("date", nunjucksDate);
 var ITEMS_PER_PAGE = 5;
 
 
-// Hardcoded USERID for use with the shopping cart portion  
+// Hardcoded USERID for use with the shopping cart portion  (CHANGE)
 var USERID = "558098a65133816958968d88";
-
-MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
+//CHANGE NAME OF DB!!
+MongoClient.connect('mongodb://127.0.0.1:27017/mongomart', function(err, db) {
     "use strict";
-
-    assert.equal(null, err);
+    //if the connections goes well or not..
+    assert.equal(null, err); 
     console.log("Successfully connected to MongoDB.");
-
+    //create DAOS "class" objects
     var items = new ItemDAO(db);
     var cart = new CartDAO(db);
     var store = new StoreDAO(db);
-
+    // express routing middleware
     var router = express.Router();
 
-    // Homepage
+//proof of work mustache inside consolidate -  TO CHANGE!
+router.get("/mustache", function(req, res) {
+        "use strict";
+      res.render('news.mustache', { name: 'tobi',value:33 });                
+});
+    //create index for text search
+    db.collection("item").createIndex({title:"text",slogan:"text",description:"text"});
+
+    // Homepage 
     router.get("/", function(req, res) {
         "use strict";
-        
-        var page = req.query.page ? parseInt(req.query.page) : 0;
+        // default: page 1 (has index 0), category "All"
+        var page = req.query.page ? parseInt(req.query.page) : 0; 
         var category = req.query.category ? req.query.category : "All";
 
         items.getCategories(function(categories) {
-            
+//get the items obj from the db and pass it to the cb (that is, to the inner function), with argument created inside its body and available (clousre) to all inners functions
             items.getItems(category, page, ITEMS_PER_PAGE, function(pageItems) {
 
                 items.getNumItems(category, function(itemCount) {
@@ -332,7 +342,11 @@ MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
     
     app.use('/', router); // Use the router routes in our application
 
-    
+    //The 404 Route (ALWAYS Keep this as the last route)
+    app.get('*', function(req, res){ 
+      res.status(404).render('404');
+    });
+
     var server = app.listen(3000, function() { // Start the server listening
         var port = server.address().port;
         console.log('Unreal Mart NodeJS server is listening on port %s.', port);

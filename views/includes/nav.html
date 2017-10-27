@@ -1,5 +1,5 @@
 <!-- Navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top" style="font-family:Georgia; background-image: url('../../static/img/black.jpg')" role="navigation">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -9,33 +9,32 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/" style="color: #fff;">Unreal Mart</a>
+            <a class="navbar-brand" href="/" style="color: #fff; font-family: Arial; font-size: 30pt;">Unreal Mart</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li>
-                    <a href="/login">Log In</a>
-                </li>
-                <li>
-                    <a href="/location">Locations</a>
-                </li>
-                <li>
-                    <a href="../../static/pages/index.html"><strong>Admin Panel</strong></a>
+                <li> <a href="/login">User Login</a> </li>
+                <li><a href="/news">Latest News</a> </li>
+                <li><a href="/location">Locations</a> </li>
+                <li><a href="../../static/pages/admin.html"><strong>Admin Panel</strong></a>
                 </li>
             </ul>
             <div class="collapse navbar-collapse">
                 <form class="navbar-form navbar-right" role="search" action="/search">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="query" placeholder="Text to search">
+                        <input type="text" class="form-control" name="query" placeholder="Item search text..">
                     </div>
-                    <button type="submit" class="btn btn-default">Search</button>
+                    <button type="submit" class="btn btn-default">Search <i class="fa fa-search" aria-hidden="true"></i>
+</button>
+                </form>
+                <div class="navbar-form navbar-right">
                     <a href="/cart">
-                        <button type="button" class="btn btn-success">
+                        <button type="button" class="btn btn-info">
                             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Cart
                         </button>
                     </a>
-                </form>
+                </div>
 
             </div>
 

@@ -6,6 +6,10 @@ var MongoClient = require('mongodb').MongoClient,
 function StoreDAO(database) {
     "use strict";
     this.db = database;
+    const minZip = 0;
+    //usa una var pipeline x fare le aggregation
+
+
     /*this.getCategories = function(callback) {
         "use strict";
         this.db.collection("item").aggregate( [{$project:{"category":1,_id:0}}, {$group:{_id:"$category",num:{$sum:1}}}, {$sort:{ _id:1}}]).toArray(function(err, categories) {
