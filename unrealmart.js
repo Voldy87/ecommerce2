@@ -252,11 +252,10 @@ router.get("/mustache", function(req, res) {
                 cart.updateQuantity(userId, itemId, item.quantity+1, function(userCart) {
                     renderCart(userCart);
                 });
-            }
+            } 
         });
-    });
-
-
+    }); 
+ 
     router.post("/user/:userId/cart/items/:itemId/quantity", function(req, res) {
         "use strict";
         
@@ -338,7 +337,6 @@ router.get("/mustache", function(req, res) {
 
         });
     });*/
-
     
     app.use('/', router); // Use the router routes in our application
 

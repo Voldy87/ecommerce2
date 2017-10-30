@@ -1,4 +1,4 @@
 start.bat
 DBCONFIGSCRIPT(todo)TIPS.txt
-node_modules/
+node_modules
 *~
