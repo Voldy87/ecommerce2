@@ -48,16 +48,16 @@
 
     <div class="row">
 
-        <div class="col-md-2" style="font-family: Serif">
+        <div class="col-md-2" style="font-family: Serif; background-image: url('../../static/img/wood2.jpg'); background-size:100% auto;">
             <div class="list-group">
                 {% for category in categories %}
                 <a href="/?category={{category._id}}"
                    {% if category_param == category._id %}
-                   class="list-group-item active">
+                   class="list-group-item active" style="margin: 25px 6px; border-radius: 10px">
                   {% else %}
-                   class="list-group-item inactive">
+                   class="list-group-item inactive" style="margin: 15px 6px; border-radius: 20px">
                   {% endif %}
-                  <span class="badge">
+                  <span class="badge" style="border-radius: 3px; background-color: black;">
                     {{category.num}}
                   </span>
                   {{category._id}}
@@ -72,16 +72,17 @@
             {% for item in items %}
 
                 <!-- Project One -->
-                <div class="row">
+                <div class="row" style="border: medium outset brown; margin: 5px;
+    padding: 3px; border-radius: 20px;">
                     <div class="col-md-7">
                         <a href="/item/{{item._id}}">
                             <img class="img-responsive" src="/static/{{item.img_url}}" alt="">
                         </a>
                     </div>
                     <div class="col-md-5">
-                        <h3><a href="/item/{{item._id}}">{{item.title | title}}</a></h3>
+                        <h3><a href="/item/{{item._id}}" class="text-success bg-warning">{{item.title | title}}</a></h3>
                         <h4>{{item.slogan}}</h4>
-                        <details>
+                        <details style="cursor: help;">
                             <summary>
                                 <p><small><i>{{ item.description | truncate(100, false, " ..(see more)") }}</i></small></p>
                             </summary>
@@ -144,12 +145,21 @@
 
             <!-- /.row -->
         </div>
-    <div class="col-md-2">
-        <h3>Special Offers</h3>
-        <div class="list-group">
-            <a href="" class="list-group-item">50% discount an all emotions</a>
-            <a href="" class="list-group-item">Special gift every 4 rotten foods</a> 
-            <a href="" class="list-group-item">Free delivery to Uranus for all orders</a>         
+    <div class="col-md-2" style="background-image: url('../../static/img/wood.jpg'); background-size:100% auto;">
+        <h3 style="background: rgba(255,255,255,0.5);text-align:center;font-family: Helvetica;padding: 4px;font-weight: bold;">Special Offers</h3>
+        <div class="list-group" style="padding: 18px 2px;">
+            <a href="" class="list-group-item list-group-item-warning" style="margin:5px">
+                <h4 class="list-group-item-heading">50% discount an all emotions</h4>
+                <p class="list-group-item-text"><span class="glyphicon glyphicon-piggy-bank"></span> Only today..</p>
+            </a>
+            <a href="" class="list-group-item list-group-item-warning" style="margin:5px">
+                <h4 class="list-group-item-heading">Special gift every 4 rotten foods </h4>
+                <p class="list-group-item-text"><span class="glyphicon glyphicon-question-sign"></span> Discover it!</p> 
+            </a>           
+            <a href="" class="list-group-item list-group-item-warning" style="margin:5px">
+                <h4 class="list-group-item-heading">Free delivery to Uranus for all orders</h4>
+                <p class="list-group-item-text"><span class="glyphicon glyphicon-globe"></span> Not kidding</p>
+            </a>         
         </div>   
     </div>
     

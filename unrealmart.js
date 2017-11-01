@@ -227,7 +227,7 @@ router.get("/mustache", function(req, res) {
 
         var userId = req.params.userId;
         var itemId = parseInt(req.params.itemId);
-
+ 
         var renderCart = function(userCart) {
             var total = cartTotal(userCart);
             res.render("cart",
@@ -306,7 +306,7 @@ router.get("/mustache", function(req, res) {
                     num_stores:0,
                     states:{}
                });
-           /* });
+           /* }); 
         });*/
     });
 
