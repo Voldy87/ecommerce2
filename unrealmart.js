@@ -9,17 +9,35 @@
 
 var express = require('express'),
     bodyParser = require('body-parser'),
+    moment = require('moment'),
+    //template web engines
     engines = require('consolidate'),
+    ejs = require('ejs'),
     nunjucks = require('nunjucks'),
+    //db
     MongoClient = require('mongodb').MongoClient,
     assert = require('assert'),
+    //sessions
+    session = require('express-session'), //Since 1.5.0 "cookie-parser" mw is no longer needed
+    flash = require('req-flash'),
     //one DAO for each collection
     ItemDAO = require('./item').ItemDAO,
     CartDAO = require('./cart').CartDAO,
-    StoreDAO = require('./store').StoreDAO;
-    
+    StoreDAO = require('./store').StoreDAO,
+    UserDAO = require('./users').UserDAO;
+    // 
+    SecurityWithHash = require('./secure').SecurityWithHash;
+
+moment.locale(); 
 // Set up express
 app = express();
+// assign the various engines to different extensions files
+app.engine('html', engines.nunjucks);
+app.engine('ejs', engines.ejs);
+app.engine('handlebars', engines.handlebars);
+app.engine('mustache', engines.mustache);
+app.engine('pug', engines.pug);
+app.engine('underscore', engines.underscore);
 // set .html as the default extension
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
@@ -27,31 +45,28 @@ app.set('views', __dirname + '/views');
 app.use('/static', express.static(__dirname + '/static'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
-// assign the various engines to different extensions files
-app.engine('html', engines.nunjucks);
-app.engine('handlebars', engines.handlebars);
-app.engine('mustache', engines.mustache);
-app.engine('pug', engines.pug);
-app.engine('underscore', engines.underscore);
 
-
+// session handling
+var secret = 'ssshhhhh';
+app.use(session({secret: secret}));
+app.use(flash());
 //https://github.com/tj/consolidate.js/pull/224
 
-
-var env = nunjucks.configure('views', {
+ 
+/*var env = nunjucks.configure('views', {
     autoescape: true,
     express: app
 });
 var nunjucksDate = require('nunjucks-date');
 nunjucksDate.setDefaultFormat('MMMM Do YYYY, h:mm:ss a');
-env.addFilter("date", nunjucksDate);
+env.addFilter("date", nunjucksDate);*/
 
 
 var ITEMS_PER_PAGE = 5;
 
 
-// Hardcoded USERID for use with the shopping cart portion  (CHANGE)
-var USERID = "558098a65133816958968d88";
+// default id of an unlogged ("guest") user
+var GUEST_USERID = "0";
 //CHANGE NAME OF DB!!
 MongoClient.connect('mongodb://127.0.0.1:27017/mongomart', function(err, db) {
     "use strict";
@@ -62,7 +77,8 @@ MongoClient.connect('mongodb://127.0.0.1:27017/mongomart', function(err, db) {
     var items = new ItemDAO(db);
     var cart = new CartDAO(db);
     var store = new StoreDAO(db);
-    // express routing middleware
+    var users = new UserDAO(db);
+    // express routing middleware 
     var router = express.Router();
 
 //proof of work mustache inside consolidate -  TO CHANGE!
@@ -76,6 +92,19 @@ router.get("/mustache", function(req, res) {
     // Homepage 
     router.get("/", function(req, res) {
         "use strict";
+        //var logged=false, userId, userName, admin=false;
+        var sess = req.session;
+        if ((sess.logged)&&(!sess.userId)) { //2nd cond checks if I've already stored user data
+            users.getData(sess.email, function(id,name,isadmin){
+                sess.userId = id;
+                sess.userName = name;
+                sess.admin = isadmin;
+                //logged = true; 
+                console.log("userdb access!");
+            });
+        }
+        /*else
+            logged = false;*/
         // default: page 1 (has index 0), category "All"
         var page = req.query.page ? parseInt(req.query.page) : 0; 
         var category = req.query.category ? req.query.category : "All";
@@ -91,13 +120,17 @@ router.get("/mustache", function(req, res) {
                         numPages = Math.ceil(itemCount / ITEMS_PER_PAGE);
                     }
                 
-                    res.render('home', { category_param: category,
-                                         categories: categories,
-                                         useRangeBasedPagination: false,
-                                         itemCount: itemCount,
-                                         pages: numPages,
-                                         page: page,
-                                         items: pageItems });
+                    res.render('home', {    logged: sess.logged,
+                                            admin: sess.admin,
+                                            userId: sess.userId,
+                                            userName: sess.userName,
+                                            category_param: category,
+                                            categories: categories,
+                                            useRangeBasedPagination: false,
+                                            itemCount: itemCount,
+                                            pages: numPages,
+                                            page: page,
+                                            items: pageItems });
                     
                 });
             });
@@ -153,6 +186,9 @@ router.get("/mustache", function(req, res) {
 
                 for (var i=0; i<numReviews; i++) {
                     var review = item.reviews[i];
+
+                    review.date = moment(review.date).format('llll'); // Tue, Nov 28, 2017 11:25 AM;//review.date.toString();
+                    
                     stars += review.stars;
                 }
 
@@ -167,7 +203,7 @@ router.get("/mustache", function(req, res) {
                 console.log(relatedItems);
                 res.render("item",
                            {
-                               userId: USERID,
+                               userId: GUEST_USERID,
                                item: item,
                                stars: stars,
                                reviews: reviews,
@@ -201,24 +237,38 @@ router.get("/mustache", function(req, res) {
      *
      */
     router.get("/cart", function(req, res) {
-        res.redirect("/user/" + USERID + "/cart");
+        var id = (!req.session.logged) ? GUEST_USERID : req.session.userId;
+        res.redirect("/user/" + id  + "/cart");
     });
 
-               
+                
     router.get("/user/:userId/cart", function(req, res) {
         "use strict";
-
         var userId = req.params.userId;
-        cart.getCart(userId, function(userCart) {
-            var total = cartTotal(userCart);
-            res.render("cart",
+        if (userId==GUEST_USERID) {//has to take params from temp cookie from the currentlu unlogged guest user
+            res.render("cart",   
                        {
-                           userId: userId,
+                           userId: 0,
+                           userName: "a guest",
                            updated: false,
-                           cart: userCart,
-                           total: total
+                           //cart: userCart,
+                           total: 0//total
                        });
-        });
+        }
+        else {
+            //var userId = req.params.userId;
+            cart.getCart(parseInt(userId), function(userCart) {
+                var total = cartTotal(userCart);
+                res.render("cart",  
+                           {  
+                               userId: userId,
+                               userName: req.session.userName,
+                               updated: false,
+                               cart: userCart,
+                               total: total
+                           });
+            });
+        }
     });
 
     
@@ -231,7 +281,7 @@ router.get("/mustache", function(req, res) {
         var renderCart = function(userCart) {
             var total = cartTotal(userCart);
             res.render("cart",
-                       {
+                       {   
                            userId: userId,
                            updated: true,
                            cart: userCart,
@@ -253,8 +303,8 @@ router.get("/mustache", function(req, res) {
                     renderCart(userCart);
                 });
             } 
-        });
-    }); 
+        }); 
+    });
  
     router.post("/user/:userId/cart/items/:itemId/quantity", function(req, res) {
         "use strict";
@@ -275,13 +325,14 @@ router.get("/mustache", function(req, res) {
         });
     });
     
- 
+  
     function cartTotal(userCart) {
-        "use strict";
-
+        "use strict";  
         var total = 0;
-        for (var i=0; i<userCart.items.length; i++) {
-            var item = userCart.items[i];
+        if (!userCart) 
+            return total;
+        for (var i=0; i<userCart.length; i++) {
+            var item = userCart[i];
             total += item.price * item.quantity;
         }
 
@@ -336,8 +387,86 @@ router.get("/mustache", function(req, res) {
             }
 
         });
-    });*/
+    });
     
+
+    app.get('/admin',function(req,res){
+        sess = req.session;
+        if(sess.email) {
+        res.write('<h1>Hello '+sess.email+'</h1>');
+        res.end('<a href="+">Logout</a>');
+        } else {
+            res.write('<h1>Please login first.</h1>');
+            res.end('<a href="+">Login</a>');
+        }
+    });*/
+
+    router.get("/login", function(req, res) {
+        "use strict";
+        //app.set('view engine', 'pug')
+        res.render('login.pug',{ title: 'Login Page @UnrealMart', flash: req.flash()});           
+    });
+ 
+    router.post('/login',function(req,res){
+        /* 
+            1) check user exists for that req.body.email and in case get corresponding hashed password (if the user exist!)
+        if (!user.hash)
+            req.flash('error', 'Email and/or password are incorrect');
+         use previous data and req.body.password to check correspondance
+        users.checkCredentials(user.hash, req.body.password, user.algorithm, function(err,validLogin){
+            if(err){
+                //gestisci errore..
+            }
+            if (validLogin) {
+                req.session.logged = true;
+                res.redirect('/');
+            } else {
+                req.flash('error', 'Email and/or password are incorrect');
+                res.redirect('/login');
+            } 
+        });*/
+        if (req.body.email && req.body.email === 'user' && req.body.password && req.body.password === 'pass') {
+            req.session.logged = true;
+            req.session.email = req.body.email;
+            res.redirect('/');
+        } else {
+            req.flash('error', 'Email and password are incorrect');
+            res.redirect('/login');
+        }     
+      /*sess = req.session;
+      sess.email=req.body.email;
+      res.end('done');*/
+    });
+
+    router.get('/logout',function(req,res){
+        req.session.destroy(function(err) {
+            if(err)
+                console.log(err);
+            else 
+                res.redirect('/');
+        });
+    });    
+
+    router.get('/register',function(req,res){
+        res.render('register.ejs',{ title: 'Creating your UnrealMart account..'});
+    });
+
+    router.post('/register',function(req,res){
+        /*
+        check db if req.body.email non c'è già..
+        createCredentials(req.password, 'argon2', function(err,derivedKey,salt){
+            if(err){
+                //...
+            }
+            else {
+                    var strechedPassword: derivedKey;
+                    var salt: salt;
+            } insert user data, (send confirm email), comunicate login + redirect con session login (da levare poi se il sistema deiventa sofisticato con mail di prima & co.)
+        });
+
+        */
+    });
+
     app.use('/', router); // Use the router routes in our application
 
     //The 404 Route (ALWAYS Keep this as the last route)

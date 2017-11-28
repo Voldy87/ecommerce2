@@ -1,0 +1,2 @@
+{"_id":0,"userId":1, "name":"John", "surname":"Doe", "mail":"fake@fake.tk", "admin":true, "hash":"", "salt":""}
+{"_id":1,"userId":2, "name":"Mario", "surname":"Rossi", "mail":"mail@fakemail.tk", "admin":false, "hash":"", "salt":""}

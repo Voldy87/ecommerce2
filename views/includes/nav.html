@@ -16,16 +16,16 @@
             <ul class="nav navbar-nav">
                 {% if logged %}
                 <li> 
-                    <a href="/user/{{userId}}">{{userName}} </a>
-                    (<a href="/logout">Logout</a>) 
+                    <span style="color:white; margin: 0px 12px; background:rgba(115,55,25,0.8)"><b><a href="/user/{{userId}}">{{userName}} </a></b><small>(<a href="/logout">Logout</a>)</small></span>
                 </li>
                 {% else %}
                 <li> <a href="/login">User Login/Registration</a> </li>
                 {% endif %}
                 <li><a href="/news">Latest News</a> </li>
                 <li><a href="/location">Locations</a> </li>
-                <li><a href="../../static/pages/login.html"><strong>Admin Panel</strong></a>
-                </li>
+                {% if admin %}
+                <li><a href="../../static/pages/admin.html"><strong>Admin Panel</strong></a></li>
+                {% endif %}
             </ul>
             <div class="collapse navbar-collapse">
                 <form class="navbar-form navbar-right" role="search" action="/search">

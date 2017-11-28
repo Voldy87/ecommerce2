@@ -43,12 +43,47 @@ function CartDAO(database) {
             items: []
         }
         var dummyItem = this.createDummyItem();
-        userCart.items.push(dummyItem);*/
-        this.db.collection("cart").find({"userId": userId}).toArray(function(err, item) {
+        userCart.items.push(dummyItem);*/console.log(userId);
+        var match = {$match:{"userId": userId}};
+        var unwind = {$unwind: "$items"};
+        var lookup = {
+           "$lookup":
+             {
+               "from": "item",
+               "localField": "items._id",
+               "foreignField": "_id",
+               "as": "product"
+             }
+        };
+        var project = { 
+            "$project": 
+            {
+                "_id":0,  
+                "quantity":"$items.quantity",
+                "id":"$product._id",
+                "title":"$product.title",
+                "img_url":"$product.img_url",
+                "price":"$product.price"
+            } 
+        };
+        var project2 = {
+         $project:
+          {
+             "id": { $arrayElemAt: [ "$id", 0 ] },
+             "title": { $arrayElemAt: [ "$title", 0 ] },
+             "img_url": { $arrayElemAt: [ "$img_url", 0 ] },
+             "price": { $arrayElemAt: [ "$price", 0 ] },
+             "quantity":1
+          }
+       }; 
+        //this.db.collection("cart").find({"userId": userId}).toArray(function(err, item) {
+        this.db.collection("cart").aggregate([match,unwind,lookup,project,project2]).toArray(function(err, item) {
                 assert.equal(null, err);
                 var userCart = null;
                 if (item.length > 0)
-                    userCart = item[0];
+                    userCart = item;
+                                            //userCart = item; 
+                                             console.log(item);
                 callback(userCart);
             });
         // This could also be implemented in this mode:
