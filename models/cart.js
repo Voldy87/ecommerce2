@@ -28,22 +28,6 @@ function CartDAO(database) {
     this.getCart = function(userId, callback) {
         "use strict";
 
-        /*
-        * TODO-lab5
-        *
-        * LAB #5: Implement the getCart() method.
-        *
-        * Query the "cart" collection by userId and pass the cart to the
-        * callback function.
-        *
-        */
-
-       /* var userCart = {
-            userId: userId,
-            items: []
-        }
-        var dummyItem = this.createDummyItem();
-        userCart.items.push(dummyItem);*/console.log(userId);
         var match = {$match:{"userId": userId}};
         var unwind = {$unwind: "$items"};
         var lookup = {
@@ -93,42 +77,13 @@ function CartDAO(database) {
 
         callback(doc);
     });*/
-        // TODO-lab5 Replace all code above (in this method).
-
-        // TODO Include the following line in the appropriate
-        // place within your code to pass the userCart to the
-        // callback.
-        //callback(userCart);
+ 
     }
 
 
     this.itemInCart = function(userId, itemId, callback) {
         "use strict";
 
-        /*
-         *
-         * TODO-lab6
-         *
-         * LAB: #6
-         *
-         * Write a query that will determine whether or not the cart associated
-         * with the userId contains an item identified by itemId. If the cart
-         * does contain the item, pass the item to the callback. If it does not,
-         * pass the value null to the callback.
-         *
-         * NOTE: You should pass only the matching item to the callback. Do not
-         * pass an array of one or more items or the entire cart.
-         *
-         * SUGGESTION: While it is not necessary, you might find it easier to
-         * use the $ operator in a projection document in your call to find() as
-         * a means of selecting the matching item. Again, take care to pass only
-         * the matching item (not an array) to the callback. See:
-         * https://docs.mongodb.org/manual/reference/operator/projection/positional/
-         *
-         * As context for this method to better understand its purpose, look at
-         * how cart.itemInCart is used in the mongomart.js app.
-         *
-         */
          this.db.collection("cart").find({"userId": userId, "items._id":itemId}, {"items.$":1,"_id":0}).toArray(function(err,arr){
             if (arr.length>0)
                 callback(arr[0]);
@@ -223,22 +178,6 @@ function CartDAO(database) {
     this.updateQuantity = function(userId, itemId, quantity, callback) {
         "use strict";
 
-        /*
-        * TODO-lab7
-        *
-        * LAB #7: Update the quantity of an item in the user's cart in the
-        * database by setting quantity to the value passed in the quantity
-        * parameter. If the value passed for quantity is 0, remove the item
-        * from the user's cart stored in the database.
-        *
-        * Pass the updated user's cart to the callback.
-        *
-        * NOTE: Use the solution for addItem as a guide to your solution for
-        * this problem. There are several ways to solve this. By far, the
-        * easiest is to use the $ operator. See:
-        * https://docs.mongodb.org/manual/reference/operator/update/positional/
-        *
-        */
          var updateDoc = {};
 
         if (quantity == 0) 
@@ -253,38 +192,8 @@ function CartDAO(database) {
                 assert.equal(null, err);
                 callback(result.value);
         });
-        /*
-        var userCart = {
-            userId: userId,
-            items: []
-        }
-        var dummyItem = this.createDummyItem();
-        dummyItem.quantity = quantity;
-        userCart.items.push(dummyItem);
-        callback(userCart);
-        */
-        // TODO-lab7 Replace all code above (in this method).
 
     }
-
-    /*this.createDummyItem = function() {
-        "use strict";
-
-        var item = {
-            _id: 1,
-            title: "Gray Hooded Sweatshirt",
-            description: "The top hooded sweatshirt we offer",
-            slogan: "Made of 100% cotton",
-            stars: 0,
-            category: "Apparel",
-            img_url: "/img/products/hoodie.jpg",
-            price: 29.99,
-            quantity: 1,
-            reviews: []
-        };
-
-        return item;
-    }*/
 
 }
 
