@@ -27,20 +27,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 */
 
 var router = express.Router();
-
+var config = require('../config');
 
 /*
 router.get("/cart", products.addToCart);*/
     MongoClient = require('mongodb').MongoClient,
     assert = require('assert'),
-    
+    //CHANGE NAME OF DB!! 
+    console.log(config.db.URL);
 MongoClient.connect('mongodb://127.0.0.1:27017/mongomart', function(err, db) {  
+	   "use strict";
+    	assert.equal(null, err); 
+    	console.log("Successfully connected to MongoDB.");
 
-	var shopper = require('./shopper')(db),
-		products = require('./products')(db),
-		site = require('./site')(db),
-		accounts = require('./accounts'),
-		stores = require('./stores');
+	 //create index for text search
+    db.collection("item").createIndex({title:"text",slogan:"text",description:"text"});
+
+    var shopper = require('./handlers/shopper')(db,config.guestId),
+		products = require('./handlers/products')(db,config.guestId),
+		site = require('./handlers/site')(db,config.itemsPerPage),
+		accounts = require('./handlers/accounts'),
+		stores = require('./handlers/stores');
 	// General
 	router.get("/", site.index);
 	router.get('/search', site.search);
@@ -53,8 +60,7 @@ MongoClient.connect('mongodb://127.0.0.1:27017/mongomart', function(err, db) {
 	router.post("/user/:userId/cart/items/:itemId", shopper.addItem);
 	router.post("/user/:userId/cart/items/:itemId/quantity", shopper.editItem);
 	// Stores
-	/*
-	router.get("/location", site.location);*/
+	router.get("/location", stores.landing);
 
 	// Sessions
 	router.get("/login", accounts.signupLanding);

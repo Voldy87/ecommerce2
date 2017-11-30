@@ -16,6 +16,7 @@
         "mustache": "^2.3.0",
         "nunjucks": "~2.2.0",
         "nunjucks-date": "~1.2.0",
+        "prompt": "^1.0.0",
         "pug": "^2.0.0-rc.4",
         "req-flash": "0.0.3",
         "underscore": "^1.8.3"

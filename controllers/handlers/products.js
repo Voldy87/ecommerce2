@@ -1,9 +1,9 @@
- module.exports = function(db) {
+ module.exports = function(db,guestId) {
 
     var moment = require('moment');
 
-    var GUEST_USERID = "0";
-    var ItemDAO = require('../models/item').ItemDAO;
+    var GUEST_USERID = guestId;
+    var ItemDAO = require('../../models/item').ItemDAO;
     var items = new ItemDAO(db);
 
     var module = {};
@@ -43,15 +43,16 @@
 
             items.getRelatedItems(function(relatedItems) {
 
-                res.render("item",
-                           {
-                               userId: GUEST_USERID,
-                               item: item,
-                               stars: stars,
-                               reviews: reviews,
-                               numReviews: numReviews,
-                               relatedItems: relatedItems
-                           });
+                res.render("item", {
+                    logged: req.session.logged,
+                    user: req.session.user,
+                    userId: GUEST_USERID,
+                    item: item,
+                    stars: stars,
+                    reviews: reviews,
+                    numReviews: numReviews,
+                    relatedItems: relatedItems
+                });
             });
         });
     };

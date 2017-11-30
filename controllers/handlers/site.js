@@ -1,8 +1,9 @@
- module.exports = function(db) {    
-    var ITEMS_PER_PAGE = 5; 
+ module.exports = function(db,itemsPerPage) {    
     
-    var ItemDAO = require('../models/item').ItemDAO,
-        UserDAO = require('../models/users').UserDAO;
+    var ITEMS_PER_PAGE = itemsPerPage; 
+    
+    var ItemDAO = require('../../models/item').ItemDAO,
+        UserDAO = require('../../models/users').UserDAO;
     var items = new ItemDAO(db),
         users = new UserDAO(db);
 
@@ -12,11 +13,14 @@
         "use strict";
         //var logged=false, userId, userName, admin=false;
         var sess = req.session;
-        if ((sess.logged)&&(!sess.userId)) { //2nd cond checks if I've already stored user data
-            users.getData(sess.email, function(id,name,isadmin){
-                sess.userId = id;
-                sess.userName = name;
-                sess.admin = isadmin;
+        sess.user = {};
+        if ((sess.logged)&&(!sess.user.id)) { //2nd cond checks if I've already stored user data
+            users.getData(sess.email, function(U_id,U_name,U_isadmin){
+                sess.user = {
+                    id : U_id,
+                    name : U_name,
+                    admin : U_isadmin
+                };
                 //logged = true; 
                 console.log("userdb access!");
             });
@@ -38,9 +42,7 @@
                         numPages = Math.ceil(itemCount / ITEMS_PER_PAGE);
                     }
                     res.render('home', {    logged: sess.logged,
-                                            admin: sess.admin,
-                                            userId: sess.userId,
-                                            userName: sess.userName,
+                                            user: sess.user,
                                             category_param: category,
                                             categories: categories,
                                             useRangeBasedPagination: false,

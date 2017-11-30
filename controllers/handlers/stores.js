@@ -1,4 +1,24 @@
-  
+exports.landing =  function(req, res) {
+        "use strict";
+        var page = req.query.page ? parseInt(req.query.page) : 0;
+        var query = req.query.query ? req.query.query : "";/*
+        stores.searchStores(query, page, STORES_PER_PAGE, function(searchStores) {
+            stores.getNumSearchStores(query, function(itemCount) {
+                var numPages = 0;
+                if (storeCount > STORES_PER_PAGE) { 
+                    numPages = Math.ceil(itemCount / STORES_PER_PAGE);
+                }*/
+                res.render('locations', { 
+                    zip_error:"eeeeee",
+                    city_and_state_error:"sssss",  
+                    stores:{},
+                    pages:1, 
+                    num_stores:0,  
+                    states:{}   
+               });
+           /* });   
+        });*/ 
+    };  
 
   /* router.get("/stores/:storeId", function(req, res) {
         "use strict";

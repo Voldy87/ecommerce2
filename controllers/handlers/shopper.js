@@ -1,14 +1,14 @@
- module.exports = function(db) {
+ module.exports = function(db,guestId) {
 
-    var GUEST_USERID = "0";
+    var GUEST_USERID = guestId;
 
-    var CartDAO = require('../models/cart').CartDAO;
+    var CartDAO = require('../../models/cart').CartDAO;
     var cart = new CartDAO(db);
 
     var module = {};
     
     module.redirCart = function(req, res) {
-        var id = (!req.session.logged) ? GUEST_USERID : req.session.userId;
+        var id = (!req.session.logged) ? GUEST_USERID : req.session.user.id;
         res.redirect("/user/" + id  + "/cart");
     };
 
@@ -31,11 +31,13 @@
                 var total = cartTotal(userCart);
                 res.render("cart",  
                            {  
-                               userId: userId,
-                               userName: req.session.userName,
-                               updated: false,
-                               cart: userCart,
-                               total: total
+                              logged: req.session.logged,
+                              user: req.session.user,
+                              userId: userId,
+                              userName: req.session.user.name,
+                              updated: false,
+                              cart: userCart,
+                              total: total
                            });
             });
         }
