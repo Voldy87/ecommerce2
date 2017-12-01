@@ -7,7 +7,7 @@
  *  @requires     INTERNAL: cart.js, item.js, stores.js
  */
 var config = require('./config');
-console.log(config.currentEnv);
+console.log("The app is running in "+config.currentEnv+" mode.");
 
 var express = require('express'),
     bodyParser = require('body-parser'),
@@ -16,15 +16,11 @@ var express = require('express'),
     engines = require('consolidate'),
     ejs = require('ejs'),
     nunjucks = require('nunjucks'),
-    //db
-    MongoClient = require('mongodb').MongoClient,
-    assert = require('assert'),
     //sessions
     session = require('express-session'), //Since 1.5.0 "cookie-parser" mw is no longer needed
     flash = require('req-flash'),
     prompt = require('prompt'),
-    //one DAO for each collection
-    // 
+
     SecurityWithHash = require('./services/secure').SecurityWithHash;
 
     moment.locale(); 
@@ -52,30 +48,37 @@ var express = require('express'),
     // express routing middleware 
     var router = express.Router();
 
-    app.use(require('./controllers/routes'));
-    app.use('/', router); // Use the router routes in our application
-
-    //The 404 Route (ALWAYS Keep this as the last route)
-    app.get('*', function(req, res){ 
-      res.status(404).render('404');
-    });
     //start server
     var server;
-    if (config.currentEnv=='production') {
+    
+    if (config.currentEnv=='production') { //nodemon does not support prompt
         prompt.start();
-        prompt.get(['database_url', 'port'], function (err, result) {
+        prompt.get(['server_port'], function (err, result) {
             // 
             // Log the results. 
             // 
             console.log('Command-line input received');
             //console.log('  username: ' + result.username);
-            server = app.listen(result.port, function() { // Start the server listening
+            server = app.listen(result.server_port, function() { // Start the server listening
                 console.log('Unreal Mart NodeJS server is listening on port %s.', server.address().port);
+                app.use(require('./controllers/routes'));
+                app.use('/', router); // Use the router routes in our application    
+                //The 404 Route (ALWAYS Keep this as the last route)
+                app.get('*', function(req, res){ 
+                  res.status(404).render('404');
+                });
             });
         });
     }
     else {
         server = app.listen(config.server.port, function() { // Start the server listening
                 console.log('Unreal Mart NodeJS server is listening on port %s.', server.address().port);
+                app.use(require('./controllers/routes'));
+                app.use('/', router); // Use the router routes in our application
+                //The 404 Route (ALWAYS Keep this as the last route)
+                app.get('*', function(req, res){ 
+                  res.status(404).render('404');
+                });
         });
     }
+    

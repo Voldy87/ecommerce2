@@ -19,10 +19,14 @@ exports.server = {
 if (currentEnv != 'production') {
   exports.enableTests = true;
   // Listen on all IPs in dev/test (for testing from other machines)
-  exports.server.ip = '0.0.0.0';
-  exports.server.port = 3000;
+  exports.server = {
+    ip: '0.0.0.0',
+    port: 3000
+  };
   exports.db = {
-    URL: "mongodb://127.0.0.1:27017/"+exports.appName.toLowerCase()
+    host: "127.0.0.1",
+    port:27017,
+    name:exports.appName.toLowerCase()
   };
 }
 else { //dev
