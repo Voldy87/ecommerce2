@@ -12,7 +12,6 @@ var config = require('../config');
     if (config.currentEnv=='production') { //nodemon does not support prompt
         prompt.start();
         prompt.get(['database_url'], function (err, result) {
-            console.log('Command-line input received');
             //console.log('  username: ' + result.username);
             dbURL = result.database_url;
             connect_and_route(dbURL);

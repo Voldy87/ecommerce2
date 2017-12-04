@@ -21,7 +21,7 @@ if (currentEnv != 'production') {
   // Listen on all IPs in dev/test (for testing from other machines)
   exports.server = {
     ip: '0.0.0.0',
-    port: 3000
+    port: 3000 //port open on localhost for the dev env 
   };
   exports.db = {
     host: "127.0.0.1",

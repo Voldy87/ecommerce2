@@ -1,8 +1,20 @@
 {
-    "name": "mongomart",
-    "version": "0.1.0",
-    "description": "Ecommerce app Using the MongoDB driver and Express",
-    "main": "app.js",
+    "name": "unreal_mart",
+    "version": "0.2.0",
+    "description": "Ecommerce app Using the MongoDB drivers and Express over NodeJS",
+    "keywords": [
+        "market",
+        "ecommerce",
+        "mongodb",
+        "express",
+        "node",
+        "javascript"
+    ],
+    "bugs": {
+        "url": "https://github.com/Voldy87/ecommerce2",
+        "email": "massachusetts87@gmail.com"
+    },
+    "main": "unrealmart.js",
     "dependencies": {
         "body-parser": "~1.15.0",
         "consolidate": "^0.14.5",
@@ -12,7 +24,7 @@
         "express-session": "^1.15.6",
         "handlebars": "^4.0.11",
         "moment": "^2.19.2",
-        "mongodb": "~2.1.3",
+        "mongodb": "^2.2.33",
         "mustache": "^2.3.0",
         "nunjucks": "~2.2.0",
         "nunjucks-date": "~1.2.0",
@@ -21,6 +33,10 @@
         "req-flash": "0.0.3",
         "underscore": "^1.8.3"
     },
-    "author": "Shannon Bradshaw",
-    "license": "0BSD"
+    "scripts": {
+        "install": "node-gyp rebuild",
+        "start": "nodemon unrealmart.js"
+    },
+    "author": "Andrea Orlandi <massachusetts87@gmail.com> (http://voldy87.tk/)",
+    "license": "GPL-3.0"
 }
