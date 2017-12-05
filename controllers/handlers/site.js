@@ -22,7 +22,7 @@
                     admin : U_isadmin
                 };
                 //logged = true; 
-                console.log("userdb access!");
+                //console.log("userdb access!");
             });
         }
         /*else

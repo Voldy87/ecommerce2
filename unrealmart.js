@@ -18,10 +18,12 @@ var express = require('express'),
     nunjucks = require('nunjucks'),
     //sessions
     session = require('express-session'), //Since 1.5.0 "cookie-parser" mw is no longer needed
+    mongoStore = require('connect-mongo')(session),
     flash = require('req-flash'),
-    prompt = require('prompt'),
 
     SecurityWithHash = require('./services/secure').SecurityWithHash;
+
+var dbURL = (config.currentEnv=='production')?process.argv[3]:config.db.host + ":" + config.db.port + "/" + config.db.name;
 
     moment.locale(); 
     // Set up express
@@ -39,27 +41,32 @@ var express = require('express'),
     app.use('/static', express.static(__dirname + '/static'));
 
     app.use(bodyParser.urlencoded({ extended: true }));
-     
-    // session handling
-    var secret = 'ssshhhhh';
-    app.use(session({secret: secret}));
-    app.use(flash()); 
 
+    app.use(session({
+       /* cookie:{
+            secure: true,
+            maxAge:60000
+        },*/
+        store: new mongoStore({
+            url: 'mongodb://'+dbURL,                
+            mongoOptions: {} 
+        }),
+        secret: 'secret',
+        saveUninitialized: true,
+        resave: false
+        })
+    );
+    
+    app.use(flash()); 
     // express routing middleware 
     var router = express.Router();
 
     //start server
     var server;
     
-    if (config.currentEnv=='production') { //nodemon does not support prompt
-        prompt.start();
-        prompt.get(['server_port'], function (err, result) {
-            // 
-            // Log the results. 
-            // 
-            console.log('Command-line input received');
-            //console.log('  username: ' + result.username);
-            server = app.listen(result.server_port, function() { // Start the server listening
+    if (config.currentEnv=='production') {
+
+            server = app.listen(process.argv[2], function() { // Start the server listening
                 console.log('Unreal Mart NodeJS server is listening on port %s.', server.address().port);
                 app.use(require('./controllers/routes'));
                 app.use('/', router); // Use the router routes in our application    
@@ -68,7 +75,6 @@ var express = require('express'),
                   res.status(404).render('404');
                 });
             });
-        });
     }
     else {
         server = app.listen(config.server.port, function() { // Start the server listening

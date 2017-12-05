@@ -2,20 +2,18 @@ var express = require('express');//('../.');
 
 var router = express.Router(),
     MongoClient = require('mongodb').MongoClient,
-    assert = require('assert'),
-	prompt = require('prompt');
+    assert = require('assert');
+
 
 var config = require('../config');
 
 	var dbURL;
 	
     if (config.currentEnv=='production') { //nodemon does not support prompt
-        prompt.start();
-        prompt.get(['database_url'], function (err, result) {
+
             //console.log('  username: ' + result.username);
-            dbURL = result.database_url;
+            dbURL = process.argv[3];
             connect_and_route(dbURL);
-        });
     }
     else {
         dbURL = config.db.host + ":" + config.db.port + "/" + config.db.name;
@@ -28,7 +26,7 @@ function connect_and_route(dbURL){
 	MongoClient.connect('mongodb://'+dbURL, function(err, db) {  
 	   "use strict";
     	assert.equal(null, err); 
-    	console.log("Successfully connected to MongoDB");
+    	//console.log("Successfully connected to MongoDB");
 
 		 //create index for text search
 	    db.collection("item").createIndex({title:"text",slogan:"text",description:"text"});
