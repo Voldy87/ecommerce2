@@ -4,7 +4,5 @@ initialDbData
 initialDbData/
 *.bat
 DBCONFIGSCRIPT(todo)TIPS.txt
-Dockerfile
-.dockerignore
 prova.js
 *~
