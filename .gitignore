@@ -2,7 +2,9 @@ node_modules/
 node_modules
 initialDbData
 initialDbData/
-start.bat
+*.bat
 DBCONFIGSCRIPT(todo)TIPS.txt
 Dockerfile
+.dockerignore
+prova.js
 *~

@@ -1,5 +1,0 @@
-{
-	"_id":{"$oid":"56cb1cfb72d245023179fda4"},
-	"userId":1,
-	"items":[{"_id":2,"quantity":12},{"_id":1,"quantity":3},{"_id":16,"quantity":25},{"_id":22,"quantity":5},{"_id":13,"quantity":24}]
-}
