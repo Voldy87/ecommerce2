@@ -71,6 +71,14 @@
         });
     };
 
+   module.newCommentsNumber = function(req, res) {
+        "use strict";
+        var date = parseInt(req.query.date);
+        items.getNewReviewTotal(date, function(doc) {
+            res.send(doc);
+        });
+    };
+
                 
 return module;
 };

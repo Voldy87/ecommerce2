@@ -31,24 +31,30 @@ function connect_and_route(dbURL){
 		 //create index for text search
 	    db.collection("item").createIndex({title:"text",slogan:"text",description:"text"});
 
-	    var shopper = require('./handlers/shopper')(db,config.guestId),
-			products = require('./handlers/products')(db,config.guestId),
+	    var cart = require('./handlers/cart')(db,config.guestId),
+			item = require('./handlers/item')(db,config.guestId),
+			order = require('./handlers/order')(db,config.guestId),
 			site = require('./handlers/site')(db,config.itemsPerPage),
 			accounts = require('./handlers/accounts'),
-			stores = require('./handlers/stores'); 
+			store = require('./handlers/store'); 
 		// General
 		router.get("/", site.index);
 		router.get('/search', site.search);
 		// Shop Items
-		router.get("/item/:itemId", products.view);
-		router.post("/item/:itemId/reviews",products.comment);
-		//User's C+art items
-		router.get("/cart", shopper.redirCart);
-		router.get("/user/:userId/cart", shopper.viewCart);
-		router.post("/user/:userId/cart/items/:itemId", shopper.addItem);
-		router.post("/user/:userId/cart/items/:itemId/quantity", shopper.editItem);
+		router.get("/item/new_comments",item.newCommentsNumber); //the starting date is inside the body
+		router.get("/item/:itemId", item.view);
+		router.post("/item/:itemId/reviews",item.comment);
+		//User's Page
+		//router.get("/user/:userId", user.page);
+		//User's Cart items
+		router.get("/cart", cart.redirCart);
+		router.get("/user/:userId/cart", cart.viewCart);
+		router.post("/user/:userId/cart/items/:itemId", cart.addItem);
+		router.post("/user/:userId/cart/items/:itemId/quantity", cart.editItem);
+		//Orders
+		router.get("/order/new_orders", order.newTotalNumber);
 		// Stores
-		router.get("/location", stores.landing);
+		router.get("/location", store.landing);
 		// Sessions
 		router.get("/login", accounts.signupLanding);
 		router.post("/login", accounts.signupSend);

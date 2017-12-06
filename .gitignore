@@ -1,5 +1,6 @@
-node_modules
+docker
 initialDbData
+node_modules
 *.bat
 DBCONFIGSCRIPT(todo)TIPS.txt
 prova.js

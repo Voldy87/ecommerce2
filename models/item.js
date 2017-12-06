@@ -1,20 +1,3 @@
-/*
-  Copyright (c) 2008 - 2016 MongoDB, Inc. <http://mongodb.com>
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-*/
-
-
 var MongoClient = require('mongodb').MongoClient,
     assert = require('assert');
 
@@ -199,8 +182,29 @@ function ItemDAO(database) { // item object class prototypes (1 var member, othe
                 assert.equal(null, err);
                 callback(relatedItems);
             });
-    };
+    }; 
 
+    this.getNewReviewTotal = function(dateLimit,callback) {
+        "use strict";
+        "use strict";
+        var project = {"$project":{"_id":0}},
+            group = {"$group":{"_id":"$rev","num":{"$sum":1}}},
+            unwind = {"$unwind":{
+                path: "$reviews",
+                preserveNullAndEmptyArrays: false
+            }},
+            match = {"$match":{
+                "reviews.date":{ "$gte":dateLimit/*1455857690000*/ } 
+            } };
+        console.log(dateLimit);
+        this.db.collection("item").aggregate( [unwind,match,group,project]).toArray(function(err, doc) {
+            assert.equal(null, err);
+            if(doc.length>0)
+                callback(doc[0]);
+            else
+                callback({"num":0})
+        });
+    };
 
     this.addReview = function(itemId, comment, name, stars, callback) {
         "use strict";

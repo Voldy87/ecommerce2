@@ -8,7 +8,13 @@ This site uses a mix of technologies for the different parts of the application,
 * the "Model" sees  all data stored in a MongoDB database, accessed via JavaScript-based DAO interfaces, without ODM
 One exception (another MVC way) is the administration panel (back-end), which is a single page using [jQuery](http://jquery.com/) script as the "Controller" between the "Model" and the "View", using AJAX.
 ##Possibile improvements
-Many things yet to do....
+Many things yet to do.
+
 ##How to use it
-For now there is only a pre-logged anonoymous user with his cart
+###npm
+For development (default is NODE_ENV is unset) you can simply run "npm start", thus launching the app with nodemon. In production (set NODE_ENV to this value) launch "node unrealmart.js" with arguments (1) the port on which the server will listen on the server and (2) the url of the Mongo database which stores the data 
+###Docker(only production)
+You can use [this container](https://cloud.docker.com/swarm/aerdna/repository/docker/aerdna/unrealmart/general): the "docker run" command needs to be launched setting the environment variables PORT(port on which the server will listen inside the container, not very important) and the url of the Mongo database which stores: these variables will be fed (internally within the container) to the "node unrealmart.js" 
+For now there is only a pre-logged anonoymous user with his cart.
+
 ##License
