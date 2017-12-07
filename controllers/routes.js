@@ -36,6 +36,7 @@ function connect_and_route(dbURL){
 			order = require('./handlers/order')(db,config.guestId),
 			site = require('./handlers/site')(db,config.itemsPerPage),
 			accounts = require('./handlers/accounts'),
+			user = require('./handlers/user'),
 			store = require('./handlers/store'); 
 		// General
 		router.get("/", site.index);
@@ -44,13 +45,13 @@ function connect_and_route(dbURL){
 		router.get("/item/new_comments",item.newCommentsNumber); //the starting date is inside the body
 		router.get("/item/:itemId", item.view);
 		router.post("/item/:itemId/reviews",item.comment);
-		//User's Page
-		//router.get("/user/:userId", user.page);
 		//User's Cart items
 		router.get("/cart", cart.redirCart);
 		router.get("/user/:userId/cart", cart.viewCart);
 		router.post("/user/:userId/cart/items/:itemId", cart.addItem);
 		router.post("/user/:userId/cart/items/:itemId/quantity", cart.editItem);
+		//User's Page
+		router.get("/user/:userId", user.landing);
 		//Orders
 		router.get("/order/new_orders", order.newTotalNumber);
 		// Stores

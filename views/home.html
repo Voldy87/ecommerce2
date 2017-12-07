@@ -81,9 +81,9 @@
                     </div>
                     <div class="col-md-5">
                         <h3><a href="/item/{{item._id}}" class="text-success bg-warning">{{item.title | title}}</a></h3>
-                        <h4>{{item.sxan}}</h4>
-                        <details style="cursor: help;">
-                            <summary>
+                        <h4>{{item.price}} &#x20B0;</h4>
+                        <details >
+                            <summary data-toggle="tooltip" title="Click here to show more info on this product" style="cursor: help;">
                                 <p><small><i>{{ item.description | truncate(100, false, " ..(see more)") }}</i></small></p>
                             </summary>
                             <p>{{item.description}}</p>

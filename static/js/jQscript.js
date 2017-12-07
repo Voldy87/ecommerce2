@@ -32,6 +32,7 @@ $(function(){ //or $(document).ready(function(){
 	$("#refresh_data").click(function(){	
         var recentDays = 200;
         $( ".newStats > em" ).attr({"data-toggle":"tooltip", "title":"In the last "+recentDays+" days"});
+        $('[data-toggle="tooltip"]').tooltip();
         newCommentsNumber(recentDays);
         newOrdersNumber(recentDays);
         //..others

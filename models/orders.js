@@ -1,9 +1,8 @@
 
-var MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
+var assert = require('assert');
 
 
-function OrderDAO(database) {
+function OrderDAO(database) { //DAO class for the "order" collection
     "use strict";
     
     this.db = database;
@@ -21,4 +20,4 @@ function OrderDAO(database) {
 
 }
 
-module.exports.OrderDAO = OrderDAO;
+module.exports.OrderDAO = OrderDAO; //export DAO class

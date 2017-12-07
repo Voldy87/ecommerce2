@@ -1,5 +1,4 @@
-var MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
+var assert = require('assert');
 
 
 function ItemDAO(database) { // item object class prototypes (1 var member, others functions)
