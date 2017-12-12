@@ -18,7 +18,7 @@ exports.landing =  function(req, res) {
                });
            /* });   
         });*/ 
-    };  
+};  
 
   /* router.get("/stores/:storeId", function(req, res) {
         "use strict";

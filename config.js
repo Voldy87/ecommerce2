@@ -8,6 +8,11 @@ exports.log = {
   path: __dirname + "/var/log/app_#{currentEnv}.log"
 };  
  
+exports.backup = {
+  limit: 10 //how many of the most recents backups are stored in the db
+};
+
+
 if (currentEnv != 'production') {
   exports.enableTests = true;
   // Listen on all IPs in dev/test (for testing from other machines)

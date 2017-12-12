@@ -33,7 +33,8 @@
         "underscore": "^1.8.3"
     },
     "scripts": {
-        "start": "nodemon unrealmart.js"
+        "start": "nodemon unrealmart.js",
+        "test" : "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Andrea Orlandi <massachusetts87@gmail.com> (http://voldy87.tk/)",
     "repository": {

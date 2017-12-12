@@ -29,16 +29,39 @@ $(function(){ //or $(document).ready(function(){
 		);
 	}
 
+
+	$("#sysinfo_link").click(function(){	
+		$.get( 
+			"../../admin/sysinfo", 
+			function( data ) {
+				for (const field in data) {
+					if (data.hasOwnProperty(field)) {
+					    if (data[field] instanceof Array) {
+					    	arr = data[field];
+					    	var temp = "<ol>"
+					    	for (var i=0;i<arr.length;i++)
+					    		temp+=("<li>"+arr[i]+"</li>");
+					    	$( `#sysinfoModal_${field}`).html(temp+"</ol>");
+					    }
+					    else
+					    	$( `#sysinfoModal_${field}`).html( `${data[field]}`);
+					}
+				} 
+		  		$('#sysinfo_modal').modal();
+			}
+		);
+    });
+
 	$("#refresh_data").click(function(){	
         var recentDays = 200;
         $( ".newStats > em" ).attr({"data-toggle":"tooltip", "title":"In the last "+recentDays+" days"});
         $('[data-toggle="tooltip"]').tooltip();
         newCommentsNumber(recentDays);
         newOrdersNumber(recentDays);
-        //..others
+        //..others (Put a progress bar update that jquery show in home after each of this updating, simulating a progress...use timeouts in case too quick)
     });
 
- 	$(window).on("load",function(){ console.log("rrr");
+ 	$(window).on("load",function(){
 		$("#refresh_data").trigger("click"); //fire refresh at page load
 	});   
 

@@ -1,13 +1,14 @@
-var express = require('express');//('../.');
-
-var router = express.Router(),
+var express = require('express'),
+	router = express.Router(),
     MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
+    assert = require('assert'),
+   // yaml = require('js-yaml');
+	fs   = require('fs');
 
 
 var config = require('../config');
 
-	var dbURL;
+var dbURL;
 	
     if (config.currentEnv=='production') { //nodemon does not support prompt
 
@@ -37,7 +38,8 @@ function connect_and_route(dbURL){
 			site = require('./handlers/site')(db,config.itemsPerPage),
 			accounts = require('./handlers/accounts'),
 			user = require('./handlers/user'),
-			store = require('./handlers/store'); 
+			store = require('./handlers/store'),
+			admin = require('./handlers/admin')(db); 
 		// General
 		router.get("/", site.index);
 		router.get('/search', site.search);
@@ -62,6 +64,10 @@ function connect_and_route(dbURL){
 		router.get('/logout', accounts.signout);
 		router.get('/register', accounts.signinLanding);
 		router.post('/register', accounts.signinSend);
+		// Admin
+		router.get("/admin/sysinfo", admin.sysinfo);/*
+		router.get("/admin/backup/database", admin.saveBackup);
+		router.get("/admin/backup/local", admin.downloadBackup);*/
 	});
 		
 
