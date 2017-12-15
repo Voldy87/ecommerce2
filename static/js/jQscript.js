@@ -4,6 +4,12 @@ $(function(){ //or $(document).ready(function(){
 
    $('[data-toggle="tooltip"]').tooltip(); //enable all tooltips in the document
 
+   	function setProgressBar(val){
+   		var sel = "#progress_modal .progress-bar";
+   		$( sel ).attr({"aria-valuenow":val});
+   		$( sel ).css("width",val+"%");
+        $( sel ).html(val+"%");
+   	} 
 	function newCommentsNumber(recentDays) { //fare meglio con prelievo di sto numero da qlk config e calcolo data passata più accurata
   		var today = new Date(); 
 		var recentDateStart = today.getTime() - recentDays*24*3600*1000;
@@ -56,9 +62,13 @@ $(function(){ //or $(document).ready(function(){
         var recentDays = 200;
         $( ".newStats > em" ).attr({"data-toggle":"tooltip", "title":"In the last "+recentDays+" days"});
         $('[data-toggle="tooltip"]').tooltip();
+        setProgressBar(0);
+        $( "#progress_modal" ).modal();
         newCommentsNumber(recentDays);
+        setProgressBar(50);
         newOrdersNumber(recentDays);
-        //..others (Put a progress bar update that jquery show in home after each of this updating, simulating a progress...use timeouts in case too quick)
+        setProgressBar(100);
+        $( "#progress_modal" ).modal('toggle');
     });
 
  	$(window).on("load",function(){

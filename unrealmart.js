@@ -21,6 +21,8 @@ var express = require('express'),
     mongoStore = require('connect-mongo')(session),
     flash = require('req-flash'),
 
+    sass = require('sass'),
+
     SecurityWithHash = require('./services/secure').SecurityWithHash;
 
 var dbURL = (config.currentEnv=='production')?process.argv[3]:config.db.host + ":" + config.db.port + "/" + config.db.name;

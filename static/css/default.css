@@ -1,3 +1,23 @@
+#newItem_cont {
+    background: url(../../static/img/engine.gif) right top no-repeat, 
+                url(../../static/img/engine.gif) right bottom no-repeat, 
+                url(../../static/img/paper1.jpeg) left top repeat;
+    background-size: 50px, 50px, auto;
+}
+
+#newItem_header h5 {
+	background-color: white;
+	width: 80%;
+	text-align: center;
+	font-family: Arial;
+	font-size: 30px;
+	border-radius: 30px;
+	padding: 10px;
+	border-color: black;
+	border-style: double;
+	border-width: thick;
+}
+
 .help-block {
   font-size: xx-small;
 }

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Unreal Mart admin: adding a new item/product">
+    <meta name="author" content="Andrea Orlandi">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../css/default.css" type="text/css">
+</head>
+<body>
+
+<div class="container" style="width: 90%">
+    <div class="row" >
+        <div class="col-md-12" >
+            <div class="well well-sm" id="newItem_cont">
+                <form class="form-horizontal" method="post">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="col-md-4 text-left">
+                                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                            </div>
+                            <div class="col-md-8" id="newItem_header">
+                                <h5 type="submit" >Insert information about the object</h5>
+                            </div>                          
+                        </div>                            
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-4">
+                                <i class="fa fa-user bigicon"></i>
+                                <input id="fname" name="name" type="text" placeholder="Name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-2">
+                                <i class="fa fa-dollar bigicon"></i>
+                                <input id="pval" name="price" type="number" placeholder="Price" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-8">
+                                <i class="fa fa-info-circle bigicon"></i>
+                                <textarea class="form-control" id="desc" name="desc" placeholder="Enter the product description." rows="5"></textarea>
+                            </div>
+
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-8">
+                                <i class="fa fa-comments-o bigicon"></i>
+                                <textarea class="form-control" name="comment" placeholder="Enter the user comment" rows="3"></textarea>
+                                <textarea class="form-control" name="username" placeholder="Enter the user name." rows="1"></textarea>
+                                <select class="form-control" name="stars">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>                   
+
+                            </div>                        
+                        </div>
+                        
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

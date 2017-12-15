@@ -1,8 +1,33 @@
 /*!
- * Start Bootstrap - Shop Homepage HTML Template (http://startbootstrap.com)
- * Code licensed under the Apache License v2.0.
- * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+TRANSFORM IN LESS; DOVE VENGONO USATI GLI STILI CHE NON HAI MSSO TE???
  */
+
+
+#special_offers {
+    background-image: url('../../static/img/wood.jpg'); 
+    background-size:100% auto;
+}
+
+#special_offers h3{
+    background: rgba(255,255,255,0.5);
+    text-align:center;
+    font-family: Helvetica;
+    padding: 4px;
+    font-weight: bold;
+}
+
+#special_offers .list-group-item {
+    border: 8px solid transparent;
+    padding: 10px;
+    -webkit-border-image: url('../../static/img/border.png') 20 round; /* Safari 3.1-5 */
+    -o-border-image: url('../../static/img/border.png') 20 round; /* Opera 11-12.1 */
+    border-image: url('../../static/img/border.png') 20 round;
+}
+
+#special_offers .list-group-item.list-group-item-warning {
+    margin:15px
+}
+
 
 body {
     padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
