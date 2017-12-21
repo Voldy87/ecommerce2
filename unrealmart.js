@@ -8,7 +8,7 @@
  */
 var config = require('./config');
 console.log("The app is running in "+config.currentEnv+" mode.");
-
+ 
 var express = require('express'),
     bodyParser = require('body-parser'),
     moment = require('moment'),
@@ -19,13 +19,13 @@ var express = require('express'),
     //sessions
     session = require('express-session'), //Since 1.5.0 "cookie-parser" mw is no longer needed
     mongoStore = require('connect-mongo')(session),
-    flash = require('req-flash'),
+    flash = require('req-flash'), 
 
     sass = require('sass'),
 
     SecurityWithHash = require('./services/secure').SecurityWithHash;
 
-var dbURL = (config.currentEnv=='production')?process.argv[3]:config.db.host + ":" + config.db.port + "/" + config.db.name;
+var dbURL = (config.currentEnv=='production')?process.argv[3]:(config.db.host + ":" + config.db.port + "/" + config.db.name);
 
     moment.locale(); 
     // Set up express

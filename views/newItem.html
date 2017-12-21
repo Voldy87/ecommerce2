@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Unreal Mart admin: adding a new item/product">
+    <meta name="author" content="Andrea Orlandi">
+    <link rel="icon" href="../static/img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../static/css/default.css" type="text/css">
+</head>
+<body>
+
+<div class="container" style="width: 90%">
+    <div class="row" >
+        <div class="col-md-12" >
+            <div class="well well-sm" id="newItem_cont">
+                <form id="saveNewProduct" class="form-horizontal" method="post" enctype="multipart/form-data" action="../../item/new">
+                    <fieldset>
+                        <!--header + submit button-->
+                        <div class="form-group">
+                            <div class="col-md-4 text-left">
+                                <button type="submit" class="btn btn-primary btn-lg">Add the new product</button>
+                                <button type="button" class="btn btn-warning btn-lg" onclick="window.location.href='../static/pagesadmin.html'">Admin Page</button>
+                            </div>
+                            <div class="col-md-8" id="newItem_header">
+                                <h5 type="submit" >Insert information about the object</h5>
+                            </div>                          
+                        </div>   
+                        <!-- product Name-->                         
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-4">
+                                <i class="fa fa-user bigicon"></i>
+                                <label for="name">Product name</label>
+                                <input id="fname" name="name" type="text" placeholder="Name" class="form-control" required>
+                            </div>
+                        </div>
+                        <!--product Price -->
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-2">
+                                <i class="fa fa-dollar bigicon"></i>
+                                <label for="price">Price</label>
+                                <input id="pval" name="price" type="number" placeholder="Price" class="form-control" required>
+                            </div>
+                        </div>
+                        <!--product Slogan [optional]-->
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-8">
+                                <i class="fa fa-exclamation-circle bigicon"></i>
+                                <label for="description">Slogan</label>
+                                <textarea class="form-control" id="desc" name="slogan" placeholder="Enter the product slogan." rows="5"></textarea>
+                            </div>
+                        </div> 
+                        <!--product Description [optional]-->
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-8">
+                                <i class="fa fa-info-circle bigicon"></i>
+                                <label for="description">Description</label>
+                                <textarea class="form-control" id="desc" name="description" placeholder="Enter the product description." rows="5"></textarea>
+                            </div>
+                        </div>   
+                        <!--product Image -->
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-8">
+                                <i class="fa fa-file-picture-o bigicon"></i>
+                                <fieldset style="background: white; padding: 8px">
+                                <h3 style="margin:5px">File Upload</h3>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar"></div>
+                                </div>
+                                <div id="uploadStatusDiv">
+                                    <h5>Status</h5>
+                                    <p id="uploadStatusMsg">No image loaded yet</p>
+                                    <output id="uploadedimgThumb"></output>
+                                </div>
+                                <div id="uploadActionDiv">
+                                    <div>
+                                        <label for="fileselect">Image to upload:</label>
+                                        <input type="file" id="fileselect" name="image" />
+                                        <div id="filedrag">or drop the product image here</div>
+                                    </div>
+                                    <div id="submitbutton">
+                                        <button type="submit" class="btn btn-lg upload-btn">Upload Image File</button>
+                                    </div>
+                                </div>
+                                </fieldset>
+                            </div>
+                        </div> 
+                        <!--product Category [optional,default "Other", support for BE absence of indexOF in removing "All" category with Express item controller]-->
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-8">
+                                <i class="fa fa-bookmark bigicon"></i>                   
+                                <label for="category">Category</label>
+                                <select class="form-control" name="category">
+                                {% for category in categories %}
+                                    {% if category!="All" %}    
+                                        <option value="{{category}}" {% if category=="Others" %} selected {% endif %} > {{category}} </option>
+                                    {% endif %}
+                                {% endfor %}
+                                </select>
+                            </div>   
+                        </div>                                        
+                        <!--product Comments [optional, multi, default hidden]-->
+                        <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"></span>
+                            <div class="col-md-8">
+                                <i class="fa fa-comments-o bigicon"></i>
+                                <span id="commentsLabel"><b>Comments</b></span><br>     
+                                <button id="commentsButton" type="button" class="btn">Insert comment(s)</button>
+                                 <input type="hidden" name="reviewsNum" value=0 id="reviewsNum">
+                            </div>   
+                        </div>
+                        
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Page-specific js -->
+<script src="../static/js/jQscript.js"></script>
+
+</body>
+</html>

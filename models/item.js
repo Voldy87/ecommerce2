@@ -237,7 +237,7 @@ function ItemDAO(database) { // item object class prototypes (1 var member, othe
             function(err, doc) {
                 assert.equal(null, err);
                 callback(doc);
-            });
+        });
         // TODO Include the following line in the appropriate
         // place within your code to pass the updated doc to the
         // callback.
@@ -245,22 +245,39 @@ function ItemDAO(database) { // item object class prototypes (1 var member, othe
     }
 
 
-    this.createDummyItem = function() {
+    this.insertOne = function(title,slogan,price,description,category,url,reviews,callback) {
         "use strict";
-
-        var item = {
-            _id: 1,
-            title: "Gray Hooded Sweatshirt",
-            description: "The top hooded sweatshirt we offer",
-            slogan: "Made of 100% cotton",
-            stars: 0,
-            category: "Apparel",
-            img_url: "/img/products/hoodie.jpg",
-            price: 29.99,
-            reviews: []
+        var avgStars=0;
+        for (const i in reviews)
+            avgStars+=i.stars;
+        avgStars /= parseInt(reviews.length);
+        var doc = {
+            "title":title,
+            "slogan": slogan,
+            "description": description,
+            "category": category,
+            "img_url": url,
+            "stars":avgStars,
+            "reviews": reviews
         };
-
-        return item;
+        this.db.collection("item").count(
+            function(err, num) {
+                assert.equal(null, err);
+                doc.push({"_id": num+1});
+                this.db.collection("item").insertOne(
+                    doc,
+                    function(err, res, callback) {
+                        assert.equal(null, err);
+                        assert.equal(1, res.insertedCount);
+                        var res = {
+                            "id":num+1,
+                            "name":doc.title,
+                            "imgurl":doc.img_url
+                        };
+                        callback(res);
+                    }
+                );
+            });
     }
 }
 

@@ -45,6 +45,8 @@ function connect_and_route(dbURL){
 		router.get('/search', site.search);
 		// Shop Items
 		router.get("/item/new_comments",item.newCommentsNumber); //the starting date is inside the body
+		router.get("/item/new", item.insertForm);
+		router.post("/item/new", item.insertAction);
 		router.get("/item/:itemId", item.view);
 		router.post("/item/:itemId/reviews",item.comment);
 		//User's Cart items

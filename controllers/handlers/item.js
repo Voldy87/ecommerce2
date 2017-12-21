@@ -1,4 +1,17 @@
- module.exports = function(db,guestId) {
+module.exports = function(db,guestId) {
+
+    var express = require('express'),
+    path = require('path'),
+    fs = require('fs'),
+    readChunk = require('read-chunk')
+    formidable = require('formidable'),
+    fileType = require('file-type'),
+    bodyParser = require('body-parser'); //can i put all in root file???
+    var app = express(); 
+ /*app.use(bodyParser.urlencoded({
+    extended: true
+}));*/app.use(bodyParser.json({uploadDir:'./'}));
+
 
     var moment = require('moment');
 
@@ -7,6 +20,15 @@
     var items = new ItemDAO(db);
 
     var module = {};
+
+    function getCategoryNames(categories){
+        var getId = (acc, curr) => acc.concat(curr["_id"]);
+        var categoryNames = categories.reduce(getId,[]);
+        var index = categoryNames.indexOf("All"); //indexOf is not supported in IE7/8
+        if (typeof index != 'undefined')
+            categoryNames.splice(index,1);
+        return categoryNames;
+    }
 
     module.view =  function(req, res) {
         "use strict";
@@ -57,6 +79,111 @@
         });
     };
 
+    module.insertAction = function(req, res) {
+        "use strict";
+       // var data = req.body;
+       //console.log(req);res.redirect("../../static/pages/newItem.html")
+   /* var tempPath = req.files.image.path,
+        targetPath = path.resolve('./uploads/image.png');
+    if (path.extname(req.files.file.name).toLowerCase() === '.png') {
+        fs.rename(tempPath, targetPath, function(err) {
+            if (err) throw err;
+            console.log("Upload completed!");
+        });
+    } else {
+        fs.unlink(tempPath, function () {
+            if (err) throw err;
+            console.error("Only .png files are allowed!");
+        });
+    }*/
+        // fs MKDIR + cb
+        var form = new formidable.IncomingForm();
+        var uploadDir = path.join(__dirname, '../../temp/');
+        fs.mkdirSync(uploadDir);
+        form.uploadDir = uploadDir;
+        form.on('error', function(err) {
+            console.log('An error has occured: \n' + err);
+        });
+        form.parse(req, function(err, fields, files) {//fields is an object containing all your fields, file is an object containing properties of your uploaded file
+            var filePath = files.image.path;
+            const buffer = readChunk.sync(filePath, 0, 4100);
+            var fileName = fields.name + "." + fileType(buffer).ext; //add file extension (for Windows platforms)
+            fileName = fileName.replace(/ /g,"-").toLowerCase();
+            var newPath = path.join(__dirname,'../../static/img/products/',fileName); //parametrizza
+            fs.rename(filePath, newPath, function(err){
+                /*var img_url =; 
+                var data = {
+                    "title":fields.name,
+                    "slogan": fields.slogan,
+                    "description": fields.description,
+                    "category":fields.category,
+                    "price": fields.price,
+                    "img_url": img_url
+                };*/
+                if (err) throw err;
+                var reviewsNum = fields.reviewsNum;
+                var reviewsParts = new Array();
+                for (var i=0;i<reviewsNum;i++)
+                    reviewsParts.push(new Object());
+                var revreField = /^comment|username|stars/g,
+                    revreIndex = new RegExp(/^(?:comment|username|stars)(\d{1,})$/,'i');
+                for (var prop in fields){
+                    //console.log(prop);
+                    if (prop.search(revreField)!=-1){ //a field of a review (usernameX, commentX, starsX)
+                        var key = prop.match(revreField)[0]; //e.g. "username" in "username3"
+                        var pos = parseInt(prop.match(revreIndex)[1]); //e.g. 2 in "comment2"   
+                        console.log(pos);
+                        console.log(reviewsNum);
+                        console.log(reviewsParts);
+                       if (key=="username")
+                            key="name";
+                        reviewsParts[pos-1][key] = fields[prop]; console.log(reviewsParts);
+                    }
+                } 
+
+                console.log(reviewsParts);
+                 /*
+                var date = Date.now();
+                for (item in reviewsParts)
+                    item["date"]=date;
+                console.log(reviewsParts);
+                items.insertOne(
+                    fields.name, //title
+                    fields.slogan,
+                    fields.price,
+                    fields.description,
+                    fields.category,
+                    "/img/products/"+fileName, //img_url
+                    reviewsParts, 
+                    function(outcome) {
+                        fs.rmdir(uploadDir,function(err){
+                            items.getCategories(function(categories) {
+                                var categoryNames = getCategoryNames(categories);
+                                let obj = {
+                                    "categories": categoryNames,
+                                    "product": outcome
+                                }
+                                res.render("newItem",obj); //alert con link a new product (outcome has: id, name, imgurl)
+                            });  
+                        })       
+                    }
+                );*/
+            });
+        });
+    };
+
+    module.insertForm = function(req, res) {
+        "use strict";
+        items.getCategories(function(categories) {
+            var categoryNames = getCategoryNames(categories);
+            let obj = {
+                "categories": categoryNames,
+                "product": {}
+            }
+            console.log(categoryNames); console.log(obj);
+            res.render("newItem",obj); //call item dao for category select
+        });   
+    };
 
    module.comment = function(req, res) {
         "use strict";

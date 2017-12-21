@@ -16,12 +16,14 @@
     },
     "main": "unrealmart.js",
     "dependencies": {
-        "body-parser": "~1.15.0",
+        "body-parser": "^1.15.2",
         "connect-mongo": "^2.0.0",
         "consolidate": "^0.14.5",
         "ejs": "^2.5.7",
         "express": "~4.13.3",
         "express-session": "^1.15.6",
+        "file-type": "^7.4.0",
+        "formidable": "^1.1.1",
         "handlebars": "^4.0.11",
         "moment": "^2.19.3",
         "mongodb": "^2.2.33",
@@ -29,6 +31,7 @@
         "nunjucks": "^3.0.1",
         "nunjucks-date": "~1.2.0",
         "pug": "^2.0.0-rc.4",
+        "read-chunk": "^2.1.0",
         "req-flash": "0.0.3",
         "sass": "^1.0.0-beta.4",
         "underscore": "^1.8.3"
