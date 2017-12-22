@@ -34,10 +34,12 @@
                         <!-- product Name-->                         
                         <div class="form-group">
                             <span class="col-md-1 col-md-offset-2 text-center"></span>
-                            <div class="col-md-4">
+                            <div class="col-md-8">
                                 <i class="fa fa-user bigicon"></i>
                                 <label for="name">Product name</label>
-                                <input id="fname" name="name" type="text" placeholder="Name" class="form-control" required>
+                                <input id="fname" name="name" type="text" placeholder="Name" class="form-control" required maxlength="50">
+                                <label id="fname_errLabel" class="control-label" for="name">Product already existent!</label>
+                                <span id="fname_errGlyph" class="glyphicon glyphicon-remove form-control-feedback"></span>
                             </div>
                         </div>
                         <!--product Price -->
@@ -46,7 +48,7 @@
                             <div class="col-md-2">
                                 <i class="fa fa-dollar bigicon"></i>
                                 <label for="price">Price</label>
-                                <input id="pval" name="price" type="number" placeholder="Price" class="form-control" required>
+                                <input id="pval" name="price" type="number" placeholder="Price" class="form-control" required min="0" max="99999" step="0.01">
                             </div>
                         </div>
                         <!--product Slogan [optional]-->
@@ -55,7 +57,7 @@
                             <div class="col-md-8">
                                 <i class="fa fa-exclamation-circle bigicon"></i>
                                 <label for="description">Slogan</label>
-                                <textarea class="form-control" id="desc" name="slogan" placeholder="Enter the product slogan." rows="5"></textarea>
+                                <textarea class="form-control" id="desc" name="slogan" placeholder="Enter the product slogan." rows="5" maxlength="1000" ></textarea>
                             </div>
                         </div> 
                         <!--product Description [optional]-->

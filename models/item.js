@@ -6,6 +6,16 @@ function ItemDAO(database) { // item object class prototypes (1 var member, othe
 
     this.db = database;
     
+    this.count = function(db,doc,callback) {
+        "use strict";
+        this.db.collection("item").count(
+            function(err, count) {
+                assert.equal(null, err);
+                callback(db,doc,count);
+            }
+        );
+    }
+
     this.getCategories = function(callback) {
         "use strict";
         var project = {"$project":{"category":1,"_id":0}},
@@ -247,37 +257,39 @@ function ItemDAO(database) { // item object class prototypes (1 var member, othe
 
     this.insertOne = function(title,slogan,price,description,category,url,reviews,callback) {
         "use strict";
-        var avgStars=0;
+        var totStars= new Number(0);
         for (const i in reviews)
-            avgStars+=i.stars;
-        avgStars /= parseInt(reviews.length);
+            totStars+=parseInt(i.stars);
+        var avgStars = Math.floor(totStars/reviews.length);
         var doc = {
-            "title":title,
+            "title": title,
             "slogan": slogan,
             "description": description,
             "category": category,
+            "price": price,
             "img_url": url,
-            "stars":avgStars,
+            "stars": avgStars,
             "reviews": reviews
-        };
-        this.db.collection("item").count(
-            function(err, num) {
-                assert.equal(null, err);
-                doc.push({"_id": num+1});
-                this.db.collection("item").insertOne(
+        };console.log(doc);
+        this.count(
+            this.db,
+            doc,
+            function(db, doc,count) {
+                doc._id = count+1;
+                db.collection("item").insert(
                     doc,
-                    function(err, res, callback) {
+                    function(err, res) {
                         assert.equal(null, err);
-                        assert.equal(1, res.insertedCount);
                         var res = {
-                            "id":num+1,
+                            "id":count+1,
                             "name":doc.title,
                             "imgurl":doc.img_url
                         };
                         callback(res);
                     }
                 );
-            });
+            }
+        );
     }
 }
 

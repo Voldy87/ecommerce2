@@ -73,12 +73,21 @@ $(function(){ //or $(document).ready(function(){
         $( "#progress_modal" ).modal('toggle');
     });
 
- 	$(window).on("load",function(){
-		$("#refresh_data").trigger("click"); //fire refresh at page load
-	});   
 
-/*--------------------------PRODUCT INSERTION----------------------*/ 	
+/*--------------------------PRODUCT INSERTION (newItem.html)----------------------*/ 	
 var reader = new FileReader();
+
+$( "#fname" ).change(function() {
+	errFlag = (sessionStorage.product_names && ($.inArray($(this).val(),sessionStorage.getItem("product_names")!=-1)));
+		/* Build up errors object, name of input and error message: */
+    var display = errFlag?"visible":"hidden";
+    $("#fname_errLabel").css("visibility",display);
+    $("#fname_errGlyph").css("visibility",display);
+    if (errFlag)
+    	$("#fname").addClass("has-warning"); 
+    else
+    	$("#fname").deleteClass("has-warning"); 
+});
 
 // file drag hover
 function FileDragHover(e) {
@@ -220,7 +229,20 @@ $("#commentsButton").click(function(){
 
 
 
-
+/*---------------COMMON--------------------------*/
+ $(window).on("load",function(){
+	$("#refresh_data").trigger("click"); //fire refresh at page load
+	$("#fname_errLabel").css("visibility","hidden");
+    $("#fname_errGlyph").css("visibility","hidden");
+    $.get( 
+		"../../item/all_names", 
+		function( data ) {
+			sessionStorage.setItem("product_names", data.product_names);
+			console.log(data.product_names);
+		},
+		"json"
+	);
+}); 
 
 
 

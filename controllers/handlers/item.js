@@ -79,6 +79,16 @@ module.exports = function(db,guestId) {
         });
     };
 
+    module.allNames = function(req, res) {
+        "use strict";
+        var data = new Object();
+
+        items.getItems("All", 0, 0, function(objects) {
+            data["product_names"] = objects.reduce( (acc, curr) => acc.concat(curr["title"]) , [] );
+            res.send( data ); //call item dao for category select
+        });   
+    };
+
     module.insertAction = function(req, res) {
         "use strict";
        // var data = req.body;
@@ -140,13 +150,10 @@ module.exports = function(db,guestId) {
                         reviewsParts[pos-1][key] = fields[prop]; console.log(reviewsParts);
                     }
                 } 
-
-                console.log(reviewsParts);
-                 /*
+ 
                 var date = Date.now();
-                for (item in reviewsParts)
-                    item["date"]=date;
-                console.log(reviewsParts);
+                reviewsParts.map( x => x["date"]=date);
+            console.log(reviewsParts);
                 items.insertOne(
                     fields.name, //title
                     fields.slogan,
@@ -167,7 +174,7 @@ module.exports = function(db,guestId) {
                             });  
                         })       
                     }
-                );*/
+                );
             });
         });
     };
@@ -187,12 +194,10 @@ module.exports = function(db,guestId) {
 
    module.comment = function(req, res) {
         "use strict";
-
         var itemId = parseInt(req.params.itemId);
         var review = req.body.review;
         var name = req.body.name;
         var stars = parseInt(req.body.stars);
-
         items.addReview(itemId, review, name, stars, function(itemDoc) {
             res.redirect("/item/" + itemId);
         });

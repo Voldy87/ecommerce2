@@ -44,10 +44,10 @@ var dbURL = (config.currentEnv=='production')?process.argv[3]:(config.db.host + 
 
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.use(session({
+    app.use(session({ 
        /* cookie:{
-            secure: true,
-            maxAge:60000
+            secure: true,  
+            maxAge:60000  
         },*/
         store: new mongoStore({
             url: 'mongodb://'+dbURL,                
