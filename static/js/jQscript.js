@@ -5,6 +5,7 @@ $(function(){ //or $(document).ready(function(){
 /*----------------------GENERAL ADMIN PAGE JS---------------------*/ 
 
    $('[data-toggle="tooltip"]').tooltip(); //enable all tooltips in the document
+   $("#inserted_modal").modal('show');
 
    	function setProgressBar(val){
    		var sel = "#progress_modal .progress-bar";
@@ -80,7 +81,8 @@ var reader = new FileReader();
 $( "#fname" ).change(function() {
 	errFlag = (sessionStorage.product_names && ($.inArray($(this).val(),sessionStorage.getItem("product_names")!=-1)));
 		/* Build up errors object, name of input and error message: */
-    var display = errFlag?"visible":"hidden";
+    console.log(errFlag);
+    var display = (errFlag!=(-1))?"visible":"hidden";
     $("#fname_errLabel").css("visibility",display);
     $("#fname_errGlyph").css("visibility",display);
     if (errFlag)
@@ -234,6 +236,7 @@ $("#commentsButton").click(function(){
 	$("#refresh_data").trigger("click"); //fire refresh at page load
 	$("#fname_errLabel").css("visibility","hidden");
     $("#fname_errGlyph").css("visibility","hidden");
+
     $.get( 
 		"../../item/all_names", 
 		function( data ) {

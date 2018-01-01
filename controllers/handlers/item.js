@@ -170,7 +170,7 @@ module.exports = function(db,guestId) {
                                     "categories": categoryNames,
                                     "product": outcome
                                 }
-                                res.render("newItem",obj); //alert con link a new product (outcome has: id, name, imgurl)
+                                res.render("newItem",obj);
                             });  
                         })       
                     }
@@ -185,7 +185,7 @@ module.exports = function(db,guestId) {
             var categoryNames = getCategoryNames(categories);
             let obj = {
                 "categories": categoryNames,
-                "product": {}
+               // "product": {}
             }
             console.log(categoryNames); console.log(obj);
             res.render("newItem",obj); //call item dao for category select

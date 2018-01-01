@@ -14,7 +14,26 @@
     <link rel="stylesheet" href="../static/css/default.css" type="text/css">
 </head>
 <body>
-
+<!--modal shown after succesful insertion of a new product/item-->
+{% if product %}
+<div id="inserted_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Inserted a new item</h4>
+      </div>
+      <div class="modal-body">
+        <h6>The product <a href="/item/{{product.id}}">{{product.name}}</a> was added to Unreal Mart!</h6>
+        <a href="/item/{{product.id}}">
+            <img class="img-responsive thumb" src="/static/{{product.imgurl}}" alt="">
+        </a>    
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!--page-->
 <div class="container" style="width: 90%">
     <div class="row" >
         <div class="col-md-12" >

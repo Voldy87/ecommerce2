@@ -205,7 +205,6 @@ function ItemDAO(database) { // item object class prototypes (1 var member, othe
             match = {"$match":{
                 "reviews.date":{ "$gte":dateLimit/*1455857690000*/ } 
             } };
-        console.log(dateLimit);
         this.db.collection("item").aggregate( [unwind,match,group,project]).toArray(function(err, doc) {
             assert.equal(null, err);
             if(doc.length>0)
@@ -270,7 +269,7 @@ function ItemDAO(database) { // item object class prototypes (1 var member, othe
             "img_url": url,
             "stars": avgStars,
             "reviews": reviews
-        };console.log(doc);
+        };
         this.count(
             this.db,
             doc,
