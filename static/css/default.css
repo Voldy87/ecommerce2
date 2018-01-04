@@ -18,6 +18,12 @@
 	border-width: thick;
 }
 
+#inserted_modal {
+	border: 2px dashed #505;
+	border-radius: 10px;
+	background-color: orange;
+}
+
 #filedrag
 {
 	display: none;
@@ -62,9 +68,8 @@ h5.thumb {
 }
 
 
-  .newCommentDiv {
+.newCommentDiv {
   	padding:4px;
-
   }
 
 .help-block {

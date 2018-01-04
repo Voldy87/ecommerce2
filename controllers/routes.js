@@ -68,9 +68,9 @@ function connect_and_route(dbURL){
 		router.get('/register', accounts.signinLanding);
 		router.post('/register', accounts.signinSend);
 		// Admin
-		router.get("/admin/sysinfo", admin.sysinfo);/*
-		router.get("/admin/backup/database", admin.saveBackup);
-		router.get("/admin/backup/local", admin.downloadBackup);*/
+		router.get("/admin/sysinfo", admin.sysinfo);
+		//router.get("/admin/backup/database", admin.saveBackup);
+		router.get("/admin/backup/local", admin.downloadBackup);
 	});
 		
 

@@ -108,7 +108,7 @@ module.exports = function(db,guestId) {
     }*/
         // fs MKDIR + cb
         var form = new formidable.IncomingForm();
-        var uploadDir = path.join(__dirname, '../../temp/');
+        var uploadDir = path.join(__dirname, '../../temp/'); // mutex!!
         fs.mkdirSync(uploadDir);
         form.uploadDir = uploadDir;
         form.on('error', function(err) {
