@@ -6,7 +6,7 @@
  *  @requires     NPM: express, bodyParser, consolidate, mongodb, assert, engines
  *  @requires     INTERNAL: cart.js, item.js, stores.js
  */
-var config = require('./config');
+var config = require('./config/config');
 console.log("The app is running in "+config.currentEnv+" mode.");
  
 var express = require('express'),
@@ -33,7 +33,7 @@ var dbURL = (config.currentEnv=='production')?process.argv[3]:(config.db.host + 
     // assign the various engines to different extensions files and set .html as the default extension
     app.engine('html', engines.nunjucks);
     app.engine('ejs', engines.ejs);
-    app.engine('handlebars', engines.handlebars);
+    app.engine('hbs', engines.handlebars);
     app.engine('mustache', engines.mustache);
     app.engine('pug', engines.pug);
     app.engine('underscore', engines.underscore);
@@ -50,7 +50,7 @@ var dbURL = (config.currentEnv=='production')?process.argv[3]:(config.db.host + 
             maxAge:60000  
         },*/
         store: new mongoStore({
-            url: 'mongodb://'+dbURL,                
+            url: config.loadDbConfig("mongo"),                
             mongoOptions: {} 
         }),
         secret: 'secret',
@@ -74,7 +74,7 @@ var dbURL = (config.currentEnv=='production')?process.argv[3]:(config.db.host + 
                 app.use('/', router); // Use the router routes in our application    
                 //The 404 Route (ALWAYS Keep this as the last route)
                 app.get('*', function(req, res){ 
-                  res.status(404).render('404');
+                    res.status(404).render('404');
                 });
             });
     }
@@ -85,7 +85,7 @@ var dbURL = (config.currentEnv=='production')?process.argv[3]:(config.db.host + 
                 app.use('/', router); // Use the router routes in our application
                 //The 404 Route (ALWAYS Keep this as the last route)
                 app.get('*', function(req, res){ 
-                  res.status(404).render('404');
+                    res.status(404).render('404');
                 });
         });
     }

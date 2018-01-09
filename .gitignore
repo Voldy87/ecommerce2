@@ -3,6 +3,6 @@ initialDbData
 node_modules
 temp
 DBCONFIGSCRIPT(todo)TIPS.txt
-dbCredentials.yaml
+conf/dbCredentials.yaml
 *~
 *.bat

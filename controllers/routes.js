@@ -1,30 +1,15 @@
-var express = require('express'),
+var express = require('express'), //need all??
 	router = express.Router(),
     MongoClient = require('mongodb').MongoClient,
-    assert = require('assert'),
-   // yaml = require('js-yaml');
-	fs   = require('fs');
+    assert = require('assert');
 
+var config = require('../config/config');
 
-var config = require('../config');
-
-var dbURL;
-	
-    if (config.currentEnv=='production') { //nodemon does not support prompt
-
-            //console.log('  username: ' + result.username);
-            dbURL = process.argv[3];
-            connect_and_route(dbURL);
-    }
-    else {
-        dbURL = config.db.host + ":" + config.db.port + "/" + config.db.name;
-        connect_and_route(dbURL);
-    }
 
 module.exports = router;
 
-function connect_and_route(dbURL){
-	MongoClient.connect('mongodb://'+dbURL, function(err, db) {  
+
+	MongoClient.connect(config.loadDbConfig("mongo"), function(err, db) {  
 	   "use strict";
     	assert.equal(null, err); 
     	//console.log("Successfully connected to MongoDB");
@@ -39,7 +24,7 @@ function connect_and_route(dbURL){
 			accounts = require('./handlers/accounts'),
 			user = require('./handlers/user'),
 			store = require('./handlers/store'),
-			admin = require('./handlers/admin')(db); 
+			admin = require('./handlers/admin')(); 
 		// General
 		router.get("/", site.index);
 		router.get('/search', site.search);
@@ -69,11 +54,9 @@ function connect_and_route(dbURL){
 		router.post('/register', accounts.signinSend);
 		// Admin
 		router.get("/admin/sysinfo", admin.sysinfo);
-		//router.get("/admin/backup/database", admin.saveBackup);
+		router.get("/admin/backup/database", admin.saveBackup);
 		router.get("/admin/backup/local", admin.downloadBackup);
 	});
 		
-
-}
 
 

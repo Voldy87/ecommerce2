@@ -4,9 +4,12 @@ const   os = require('os'),
         //fstream = require('fstream'),
        // archiver = require('archiver'),
         tar = require('tar'),
-        zlib = require('zlib'),/*, 
+        zlib = require('zlib')/*, 
       mysql = require('mysql')*/; 
 
+    //var config = require('....//config/config');
+    var BackupDAO = require('../../models/backups').BackupDAO;
+    var backup = new BackupDAO();
 
 function createBackup(callback){ //copies gives obvious problem with nodemon..
     var tempDir = path.join(__dirname, '../../temp/'); // mutex!!
@@ -52,7 +55,7 @@ function createBackup(callback){ //copies gives obvious problem with nodemon..
    // return {"dir": tempDir, "file": archive} 
 }
 
-module.exports = function(dbconf) {
+module.exports = function() {
     "use strict";
     var ret = {};
     
@@ -76,29 +79,39 @@ module.exports = function(dbconf) {
         "use strict";
         createBackup(function(data){
             var archivePath = data.dir+data.file;
-            console.log(archivePath);
             res.download(archivePath, 'unrealmartBackup.tar.gz',function (err) {
                 fs.unlinkSync(archivePath);
                 fs.rmdir(data.dir,function(err){ //clear directory
-                    if (err) throw err;
-                    //res.send('admin.html');
+                    if (err) 
+                        throw err;
                 })  
             });
         });
     }; 
-    /*
+    
     ret.saveBackup =  function(req, res) {
         "use strict";
-        var data = createBackup();
-        var con = mysql.createConnection({
-            host: "localhost",
-            user: "yourusername",
-            password: "yourpassword",
-            database: "mydb"
+        createBackup(function(data){
+            var desc = "first backup";//descriptionString(); //backup order by USER at TIME
+            var obj = {"path":data.dir+data.file, "description":desc, "table":"backup"};
+            backup.getRowNumber(function(rows){
+                if (backup.maxRows==rows) 
+                    backup.deleteOldest(function(){
+                        backup.writeOne(obj, function(){
+                            res.render("admin"); //jquery loadng and communicate finished
+                        }); 
+                    });
+                else           
+                    backup.writeOne(obj, function(){
+                        res.render("admin");
+                    });
+            });
         });
+
+        
         // check last N db (see config), if N delete 1 and : zip current folder, load into db 
         //send res to jquery that in the meanwhile is showing a gif (general progress)
-    };*/
+    };
 
     return ret;
 };
