@@ -15,7 +15,7 @@ exports.log = {
 exports.backup = {
   limit: 10, //how many of the most recents backups are stored in the db
   tables: [
-    {"backup": "( num INT AUTO_INCREMENT PRIMARY KEY, desc VARCHAR(500), time TIME(6) NOT NULL, zip_file BLOB NOT NULL)"}
+    {"backup": "( num INT AUTO_INCREMENT PRIMARY KEY, desc VARCHAR(300), time TIME(6) NOT NULL, zip_file BLOB NOT NULL)"}
   ]
 };
 
@@ -35,13 +35,13 @@ if (currentEnv != 'production') { //dev localhost parameters for dbs are hard-co
       port:27017,
       database:exports.appName.toLowerCase()
     },
-    mysql: {
+    mysql: { 
       type: "credentials",
       host: "127.0.0.1",
       user: "root",
       password: "root",
       port: 3306,
-      database: exports.appName.toLowerCase()+"_backup"
+      database: exports.appName.toLowerCase()+"_bis"
     }
   }
 }

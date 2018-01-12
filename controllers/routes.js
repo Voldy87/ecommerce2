@@ -54,8 +54,9 @@ module.exports = router;
 		router.post('/register', accounts.signinSend);
 		// Admin
 		router.get("/admin/sysinfo", admin.sysinfo);
-		router.get("/admin/backup/database", admin.saveBackup);
-		router.get("/admin/backup/local", admin.downloadBackup);
+		router.get("/admin/backup/full", admin.saveBackup);
+		router.get("/admin/backup/local", admin.downloadBackupFiles);
+		router.get("/admin/backup/database", admin.downloadBackupDB);
 	});
 		
 

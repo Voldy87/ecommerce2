@@ -11,13 +11,19 @@ const   os = require('os'),
     var BackupDAO = require('../../models/backups').BackupDAO;
     var backup = new BackupDAO();
 
-function createBackup(callback){ //copies gives obvious problem with nodemon..
+function createMongoBackup(callback){}
+function createMysqlBackup(callback){}
+function createFullBackup(callback){} //uses 2 aboves + 1 below and zip all
+
+
+function createFileBackup(callback){ //copies gives obvious problem with nodemon..
     var tempDir = path.join(__dirname, '../../temp/'); // mutex!!
     var readDir = path.join(__dirname, '../../');
     var archive = 'backup.tar.gz';
     fs.mkdir(tempDir,function(err){ //create temporary folder with files to save
         if (err) 
-            throw err;
+            throw err; 
+        fs.chmodSync(tempDir,'777');
         fs.readdir(readDir, function(err, files) { //copy all files/dirs into temp folder..
             var filesToCopy = new Array();
             for (var i=0; i<files.length; i++) {
@@ -75,9 +81,9 @@ module.exports = function() {
     }; 
   
 
-    ret.downloadBackup =  function(req, res) {
+    ret.downloadBackupFiles =  function(req, res) {
         "use strict";
-        createBackup(function(data){
+        createFileBackup(function(data){
             var archivePath = data.dir+data.file;
             res.download(archivePath, 'unrealmartBackup.tar.gz',function (err) {
                 fs.unlinkSync(archivePath);
@@ -88,22 +94,30 @@ module.exports = function() {
             });
         });
     }; 
-    
+
+    ret.downloadBackupDB =  function(req, res) {
+        "use strict";
+        //use mysqldump and mongodump, in separate funs, then zip the 2
+    };     
+
     ret.saveBackup =  function(req, res) {
         "use strict";
-        createBackup(function(data){
+        createFullBackup(function(data){
             var desc = "first backup";//descriptionString(); //backup order by USER at TIME
             var obj = {"path":data.dir+data.file, "description":desc, "table":"backup"};
             backup.getRowNumber(function(rows){
                 if (backup.maxRows==rows) 
-                    backup.deleteOldest(function(){
-                        backup.writeOne(obj, function(){
+                    backup.deleteOldest(function(){ //tells remote server to delete 1 item
+                        backup.writeOne(obj, function(){ //upload 1 item to remote server 
                             res.render("admin"); //jquery loadng and communicate finished
                         }); 
                     });
                 else           
-                    backup.writeOne(obj, function(){
-                        res.render("admin");
+                    backup.writeOne(obj, function(result){ //upload 1 item to remote server
+                        if (result.affectedRows!=1)
+                            res.render("error.hbs")
+                        else
+                            res.render("admin");
                     });
             });
         });

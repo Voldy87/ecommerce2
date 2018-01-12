@@ -44,21 +44,20 @@ function BackupDAO ()  { //DAO class
 					});
 				});
 			 });	
-		});		
+		});		 
 	}
 
 	this.writeOne = function(obj,callback) { //DAO method (exported)
 		//var conf = config.loadDbConfig("mysql");//assume that is given that the mysql contains the backuop db
 		connect(this.dbconfig, function(connection){
-			var tablename = config.getDbName("mysql");
-			//execute as root GRANT FILE ON *.* TO 'mysql_user'@'localhost';
-			var sql = `INSERT INTO ${tablename} (desc, time, zip_file) VALUES('${obj.description}', NOW(), LOAD_FILE('${obj.path}'))`; //use string interpolation
+			var tablename = "backup"; //this can't be hardcoded!!
+			var sql = `INSERT HIGH_PRIORITY INTO ${tablename} (description, creation_time, filepath) VALUES('${obj.description}', NOW(), '${obj.path}'`; //use string interpolation, no hardocde!!
 			console.log(sql);
 			connection.query(sql, function (err, result) {
-			    if (err) 
+			    if (err)  
 			    	throw err;
 			    connection.end();
-			    callback();
+			    callback(result);
 			 });
 		});
 	}

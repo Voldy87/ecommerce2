@@ -42,11 +42,24 @@
         "underscore": "^1.8.3"
     },
     "scripts": {
-        "prestart": "",
+        "prestart": "npm build",
         "start": "nodemon unrealmart.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint:scripts":"jshlint --ignore-pattern \"**/*.min.js\" --ignore-pattern \"**/vendor/**\" public/",
+        "prebuild": "npm run clean -s",
+        "build": "npm run build:scripts -s && npm run build:styles -s",
+        "build:styles": "npm-run-all build:styles:*",
+        "build:styles:sass": "node-sass -w static/styles/sass/main.scss static/styles/css/main.css",
+        "build:scripts": "npm-run-all build:scripts:*",
+        "build:scripts:js": "browserify static/js/* --ignore static/js/bundle.js  | uglifyjs --outfile static/js/bundle.js"
     },
-    "author": "Andrea Orlandi <massachusetts87@gmail.com> (http://voldy87.tk/)",
+    "browserify": {
+        "transform":[ 
+            "babelify",
+            "envify"
+        ]
+    },
+    "author": "Andrea Orlandi <massachusetts87@gmail.com> (https://voldy87.tk/)",
     "repository": {
         "type": "git",
         "url": "git://github.com/Voldy87/ecommerce2.git"
