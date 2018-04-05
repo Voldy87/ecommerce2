@@ -1,0 +1,8 @@
+{
+  "name": "unreal_mart",
+  "app_id": "a86f9483",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
