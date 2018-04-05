@@ -1,1 +1,19 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-nav id="nav" #mainav [root]="rootPage" swipeBackEnabled="false"></ion-nav>
+
+<ion-menu [content]="mainav"> <!--refers to local variable referring to the NAV component instance -->
+
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>My beautiful set of Pages</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <button ion-item *ngFor="let pag of pages" (click)="openPage(pag)">
+        {{pag.title}}
+      </button>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>

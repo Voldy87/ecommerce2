@@ -6,3 +6,4 @@ DBCONFIGSCRIPT(todo)TIPS.txt
 conf/dbCredentials.yaml
 *~
 *.bat
+unreal_mart/.git*
