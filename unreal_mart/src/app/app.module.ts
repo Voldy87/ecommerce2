@@ -5,14 +5,24 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
+//custom components
+import { ProductCardComponent, ModalContentPage } from '../components/product-card/product-card';
+import { ReviewsModalComponent } from '../components/reviews-modal/reviews-modal';
+
 import { HomePage } from '../pages/home/home';
+//custom pages
 import { ContactPage } from '../pages/contact/contact';
+import { MainPage } from '../pages/main/main';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ContactPage
+    ContactPage,
+    MainPage,
+    ProductCardComponent,
+    ModalContentPage,
+    ReviewsModalComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +32,9 @@ import { ContactPage } from '../pages/contact/contact';
   entryComponents: [
     MyApp,
     HomePage,
-    ContactPage
+    ContactPage,
+    MainPage,
+    ModalContentPage
   ],
   providers: [
     StatusBar,

@@ -3,6 +3,7 @@ import { NavController,ActionSheetController, Platform } from 'ionic-angular';
 
 
 import { ContactPage } from '../contact/contact';
+import { MainPage } from '../main/main';
 
 @Component({
   selector: 'page-home',
@@ -14,8 +15,12 @@ export class HomePage {
 
   }
 
-  YourFancyButton(){
-    this.navCtrl.setRoot(ContactPage);
+  YourFancyButton(arg){
+    if (arg=='contact')
+    console.log(33)
+      this.navCtrl.setRoot(ContactPage);
+    if (arg=='main')
+      this.navCtrl.setRoot(MainPage);
   }
 
   presentActionSheet() {

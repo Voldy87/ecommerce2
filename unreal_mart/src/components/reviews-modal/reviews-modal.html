@@ -1,0 +1,20 @@
+<ion-card>
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="img/logo.png">
+      </ion-avatar>
+      <h2>{{ review.name }}</h2>
+      <p>has commented this product</p>
+    </ion-item>
+    <ion-card-content>
+      <p>{{ review.comment }}</p>
+      <ion-badge>{{ review.stars }}</ion-badge>
+    </ion-card-content>
+    <ion-row>
+      <ion-col text-right>
+        <ion-note>
+            posted <ion-datetime displayFormat="hh:mm MMM D, YYYY" min="1900" max="2018" [(ngModel)]="reviewTime"></ion-datetime>
+        </ion-note>
+      </ion-col>
+    </ion-row>
+</ion-card>
