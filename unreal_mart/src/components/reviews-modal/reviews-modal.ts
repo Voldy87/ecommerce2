@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ModalController, Platform, NavParams, ViewController } from 'ionic-angular';
+//import { ModalController, Platform, NavParams, ViewController } from 'ionic-angular';
 /**
  * Generated class for the ReviewsModalComponent component.
  *

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { ProductCardComponent } from '../../components/product-card/product-card';
+//import { ProductCardComponent } from '../../components/product-card/product-card';
 
 /**
  * Generated class for the MainPage page.
@@ -17,7 +17,9 @@ import { ProductCardComponent } from '../../components/product-card/product-card
 })
 export class MainPage {
   products:object
+  public toggle:boolean
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.toggle = false;
     this.products = [
       {
         "title":"logo",
@@ -29,17 +31,17 @@ export class MainPage {
         "reviews":[{
           "stars":5,
           "name":"gianni",
-          "comment":"bien",
+          "comment":"bien que lorem ppsium que lorem ppsium que lorem ppsium que lorem ppsium que lorem ppsiumque lorem ppsium que lorem ppsium",
           "date":1.111122223333e+12
           },
           {
-          "stars":5,
+          "stars":2,
           "name":"renat",
           "comment":"uaw",
           "date":1.111102223133e+12
           },
           {
-          "stars":5,
+          "stars":1,
           "name":"assano",
           "comment":"good",
           "date":1.111102023333e+12
@@ -49,7 +51,7 @@ export class MainPage {
       {
         "title":"logo3",
         "description":"desc3",
-        "slogan":"slog333333333333333",
+        "slogan":"a very nice product IMHO",
         "img_url": "logo.png",
         "category":"tech",
         "price": 7777,
@@ -107,8 +109,16 @@ export class MainPage {
     console.log("delete spinner now");
   }
 
+  search(event:Event)  {
+    console.log("search");
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad MainPage');
+  }
+
+  public notify() {
+    console.log("Toggled: "+ this.toggle);
   }
 
 }

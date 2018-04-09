@@ -15,12 +15,20 @@ export class HomePage {
 
   }
 
-  YourFancyButton(arg){
-    if (arg=='contact')
-    console.log(33)
-      this.navCtrl.setRoot(ContactPage);
-    if (arg=='main')
-      this.navCtrl.setRoot(MainPage);
+  goToPage(page:string,root:boolean){
+    var DestPage;
+    switch(page) {
+      case 'contact':
+        DestPage=ContactPage;
+        break;
+      case 'main':
+        DestPage=MainPage;
+        break;
+    }
+    if (root)
+      this.navCtrl.setRoot(DestPage)
+    else
+      this.navCtrl.push(DestPage)
   }
 
   presentActionSheet() {

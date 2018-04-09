@@ -1,3 +1,11 @@
 page-contact {
-
+  button a {
+    text-decoration: unset;
+  }
+  ion-content, ion-list{
+    margin-top:5rem;
+  }
+  .newsletter {
+    margin-bottom:4rem;
+  }
 }

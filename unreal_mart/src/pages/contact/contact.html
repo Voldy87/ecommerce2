@@ -7,36 +7,47 @@
 <ion-header>
 
   <ion-navbar>
-      <ion-title>Contact Us</ion-title>
-      <ion-icon name="contacts" color="warning"></ion-icon>
+      <ion-chip>
+          <ion-icon name="contacts" color="warning"></ion-icon>
+          <ion-label>Contact Unreal Mart</ion-label>
+        </ion-chip>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content class="contact-content" padding>
-    <button ion-button block (click)="doPrompt()">
-        Subscribe to our Newsletter
-      </button>
+    <button class="newsletter" ion-button block (click)="doPrompt()">
+      Subscribe to our Newsletter
+    </button>
     <ion-list>
-        <ion-list-header>
-          How can you contact Unreal Mart?
-        </ion-list-header>
-
+      <ion-list-header>
+        How can you contact Unreal Mart?
+      </ion-list-header>
         <ion-item>
           <ion-icon name="locate" item-start color="primary"></ion-icon>
           <ion-label>On the territory</ion-label>
           <button ion-button outline item-end>Reach us!</button>
         </ion-item>
         <ion-item>
-          <ion-icon name="body" item-start color="danger"></ion-icon>
-          <ion-label>Using the "Social"</ion-label>
-          <button ion-button outline item-end>Reach!</button>
-        </ion-item>
-        <ion-item>
           <ion-icon name="mail" item-start color="dark"></ion-icon>
           <ion-label>Via Mail</ion-label>
-          <button ion-button outline item-end>Write us!</button>
+          <button ion-button outline item-end><a href="mailto:unrealmart@voldy87.tk">Write us!</a></button>
         </ion-item>
-    </ion-list>
+
+    <ion-fab center middle #fab5>
+        <button ion-fab color="danger" (click)="clickMainFAB()"><ion-icon name="md-share"></ion-icon></button>
+        <ion-fab-list side="bottom">
+          <button ion-fab (click)="openSocial('facebook', fab5)" color="secondary"><ion-icon name="logo-facebook"></ion-icon></button>
+        </ion-fab-list>
+        <ion-fab-list side="left">
+          <button ion-fab (click)="openSocial('googleplus', fab5)" color="light"><ion-icon name="logo-googleplus"></ion-icon></button>
+        </ion-fab-list>
+        <ion-fab-list side="right">
+          <button ion-fab (click)="openSocial('twitter', fab5)" color="dark"><ion-icon name="logo-twitter"></ion-icon></button>
+        </ion-fab-list>
+    </ion-fab>
+
+  </ion-list>
+
 </ion-content>

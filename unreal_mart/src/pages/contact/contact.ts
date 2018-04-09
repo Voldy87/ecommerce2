@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, FabContainer } from 'ionic-angular';
 
 /**
  * Generated class for the ContactPage page.
@@ -45,6 +45,14 @@ export class ContactPage {
     });
 
     alert.present();
+  }
+
+  clickMainFAB() {
+    console.log('Clicked open social menu');
+  }
+  openSocial(network: string, fab: FabContainer) {
+    console.log('Share in ' + network);
+    fab.close();
   }
 
   ionViewDidLoad() {

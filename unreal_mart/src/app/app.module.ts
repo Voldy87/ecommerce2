@@ -13,6 +13,7 @@ import { HomePage } from '../pages/home/home';
 //custom pages
 import { ContactPage } from '../pages/contact/contact';
 import { MainPage } from '../pages/main/main';
+import { ProductFilterComponent } from '../components/product-filter/product-filter';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { MainPage } from '../pages/main/main';
     MainPage,
     ProductCardComponent,
     ModalContentPage,
-    ReviewsModalComponent
+    ReviewsModalComponent,
+    ProductFilterComponent
   ],
   imports: [
     BrowserModule,

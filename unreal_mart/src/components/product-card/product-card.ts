@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ModalController, Platform, NavParams, ViewController } from 'ionic-angular';
-
-import { ReviewsModalComponent } from '../reviews-modal/reviews-modal';
+//import { TitleCasePipe } from '@angular/common';
+//import { ReviewsModalComponent } from '../reviews-modal/reviews-modal';
 
 /**
  * Generated class for the ProductCardComponent component.
@@ -14,7 +14,6 @@ import { ReviewsModalComponent } from '../reviews-modal/reviews-modal';
   templateUrl: 'product-card.html'
 })
 export class ProductCardComponent {
-  text: string;
   @Input('item-input') item;
   @Output() loadedItems = new EventEmitter();
   FullStars = Array;
@@ -32,7 +31,6 @@ export class ProductCardComponent {
          return "aperture"
       }
       case "constant_expr2": {
-         //statements;
          break;
       }
       default: {
@@ -58,9 +56,24 @@ export class ProductCardComponent {
 
 @Component({
   template: `
-  <ion-list>
-    <reviews-modal *ngFor="let rev of reviews" [rev-input]="rev"></reviews-modal>
-  </ion-list>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Reviews on the product
+      </ion-title>
+      <ion-buttons start>
+        <button ion-button (click)="dismiss()">
+          <span ion-text color="primary" showWhen="ios">Cancel</span>
+          <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <reviews-modal *ngFor="let rev of reviews" [rev-input]="rev"></reviews-modal>
+    </ion-list>
+  </ion-content>
   `
 })
 export class ModalContentPage {

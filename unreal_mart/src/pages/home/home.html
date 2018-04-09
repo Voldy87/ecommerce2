@@ -1,24 +1,29 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Home Page Unreal Mart
+      Unreal Mart
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding text-center>
-  <button ion-button round (click)="YourFancyButton('main')">
+  <img src="assets/imgs/splash.jpg"/>
+  <button class="enter" ion-button round large outline (click)="goToPage('main',true)">
     Enter the Mart!!
   </button>
-  <button ion-button block (click)="presentActionSheet()">
+  <button ion-button color='light' block (click)="presentActionSheet()">
     What's your reaction using this App?
   </button>
-  <button ion-button round (click)="YourFancyButton('contact')">
-    Contact Us
+  <button ion-button icon-left color='secondary' round (click)="goToPage('contact',false)">
+      <ion-icon name="contacts"></ion-icon>
+      Contact Us
   </button>
-
-  <h4 ion-text color="dark">You can shop also on your PC!!</h4>
-  <p>
-    <a href="https://unrealmart.voldy87.tk/">Here</a> our desktop version.
-  </p>
+  <hr>
+  <ion-row class="desktop">
+      <h6 ion-text color="dark">You can shop on your PC, too</h6>
+      <p>
+        <ion-icon name="desktop"></ion-icon>
+        <a href="https://unrealmart.voldy87.tk/">Here</a> our desktop version.
+      </p>
+  </ion-row>
 </ion-content>

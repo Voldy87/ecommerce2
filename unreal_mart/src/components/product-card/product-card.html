@@ -1,60 +1,56 @@
 <!-- Generated template for the ProductCardComponent component -->
 
   <ion-card>
-
-    <img src="assets/imgs/{{ item.img_url }}"/>
-
     <ion-card-content>
       <ion-card-title>
-        {{ item.title }}
+        <ion-row>
+          <ion-col col-5>
+            <span>{{ item.title | titlecase }}</span>
+          </ion-col>
+        <ion-col col-7>
+          <ion-img src="assets/imgs/{{ item.img_url }}"></ion-img>
+        </ion-col>
+
+        </ion-row>
       </ion-card-title>
       <ion-card-header>
-        {{ item.slogan }}
+        <ion-row>
+          <ion-col col-7>
+            <p>{{ item.slogan }}</p>
+          </ion-col>
+          <ion-col col-5>
+            <ion-icon name='star' *ngFor="let i of FullStars(full).fill(1)"></ion-icon>
+            <ion-icon name='star-outline' *ngFor="let i of EmptyStars(empty).fill(1)"></ion-icon>
+        </ion-col>
+      </ion-row>
       </ion-card-header>
-      <p>
+      <p class="desc">
         {{ item.description}}
       </p>
     </ion-card-content>
 
     <ion-row no-padding text-center>
-      <ion-col col-6>
-        <button ion-button clear small color="danger" icon-start>
-          <ion-icon [name]="iconAssign(item.category)"></ion-icon>
-          {{ item.category }}
+      <button ion-button clear small color="danger" icon-start>
+        <ion-icon [name]="iconAssign(item.category)"></ion-icon>
+        {{ item.category }}
+      </button>
+      <button ion-button clear small color="danger" icon-start>
+        <ion-icon name="pricetag"></ion-icon>
+        {{ item.price }}
+      </button>
+      <button ion-button clear small color="danger" icon-start>
+        <ion-icon name='cart'></ion-icon>
+        Add to Cart
+      </button>
+      <button ion-button clear small color="danger" icon-start>
+        <ion-icon name='bookmark'></ion-icon>
+        Favorite
         </button>
-      </ion-col>
-      <ion-col col-6>
-          <button ion-button clear small color="danger" icon-start>
-            <ion-icon name="pricetag"></ion-icon>
-            {{ item.price }}
-          </button>
-        </ion-col>
-
     </ion-row>
-
     <ion-row>
-        <ion-col col-4 text-left>
-            <button ion-button clear small color="danger" icon-start>
-              <ion-icon name='cart'></ion-icon>
-              Add to Your Cart
-            </button>
-          </ion-col>
-          <ion-col col-4 offset-4 text-right>
-            <button ion-button clear small color="danger" icon-start>
-              <ion-icon name='bookmark'></ion-icon>
-              Favorite
-            </button>
-          </ion-col>
-    </ion-row>
-
-    <ion-row>
-          <ion-col col-4>
-            <ion-icon name='star' *ngFor="let i of FullStars(full).fill(1)"></ion-icon>
-            <ion-icon name='star-outline' *ngFor="let i of EmptyStars(empty).fill(1)"></ion-icon>
-          </ion-col>
-          <ion-col col-8>
+          <ion-col>
               <a ion-item (click)="openModal()">
-                  See comments about <i>{{ item.title }}</i>
+                  Comments on <i>{{ item.title }}</i>
               </a>
           </ion-col>
     </ion-row>

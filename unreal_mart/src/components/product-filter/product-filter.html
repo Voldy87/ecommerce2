@@ -1,0 +1,94 @@
+<ion-item>
+  <ion-label color="primary">Contains</ion-label>
+  <ion-input placeholder="write something here.."></ion-input>
+</ion-item>
+  <ion-segment color="danger" [(ngModel)]="favorites">
+    <ion-segment-button value="all">All</ion-segment-button>
+    <ion-segment-button value="ready">Only available</ion-segment-button>
+  </ion-segment>
+
+    <ion-item>
+      <ion-label>Category</ion-label>
+      <ion-select [(ngModel)]="category" okText="Okay" cancelText="Dismiss" [compareWith]="compareFn">
+        <ion-option *ngFor="let o of categoryData" [value]="o">{{o.text}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Shipping</ion-label>
+      <ion-select [(ngModel)]="shipping" interface="popover">
+        <ion-option value="earth">Earth Only</ion-option>
+        <ion-option value="all">All Universe</ion-option>
+      </ion-select>
+    </ion-item>
+
+
+    <ion-list-header>Price</ion-list-header>
+
+    <ion-item>
+      <ion-label>Fixed range</ion-label>
+      <ion-select [(ngModel)]="toppings" multiple="true" cancelText="Nah" okText="Okay!">
+        <ion-option value=99>0-99</ion-option>
+        <ion-option value=499>100-499</ion-option>
+        <ion-option value=9999>500-9999</ion-option>
+        <ion-option value=10000>10000 and more</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">MIN</ion-label>
+      <ion-input type="number" placeholder="..."></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary">MAX</ion-label>
+      <ion-input type="number" placeholder="..."></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Custom range, spinner</ion-label>
+      <ion-range dualKnobs="true" [(ngModel)]="dualPrice" pin="true" min="0" max="100000" step="100">
+          <ion-label>min</ion-label>
+          <ion-label>max</ion-label>
+      </ion-range>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Productor</ion-label>
+      <ion-select [(ngModel)]="productors" multiple="true" [selectOptions]="productorAlertOpts">
+        <ion-option *ngFor="let o of productorData" [value]="o.value">{{o.text}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Disabled</ion-label>
+      <ion-select multiple disabled="true">
+        <ion-option checked="true">Selected Text</ion-option>
+      </ion-select>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label>Minimum Average Rating</ion-label>
+      <ion-select [(ngModel)]="rating" interface="action-sheet">
+        <ion-option value="1">1 Star</ion-option>
+        <ion-option value="2">2 Stars</ion-option>
+        <ion-option value="3">3 Stars</ion-option>
+        <ion-option value="4">4 Stars</ion-option>
+        <ion-option value="5">5 Stars</ion-option>
+      </ion-select>
+    </ion-item>
+
+
+  <ion-item-divider color="primary">
+      Active filters
+      <button ion-button item-end outline color="light">Clear</button>
+</ion-item-divider>
+
+<!-- applied filters -->
+<ion-chip #chip1>
+    <ion-label>Default</ion-label>
+    <button ion-button clear (click)="delete(chip1)">
+      <ion-icon name="close-circle"></ion-icon>
+    </button>
+</ion-chip>
+
+
