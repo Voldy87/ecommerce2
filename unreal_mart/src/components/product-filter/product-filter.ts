@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { PipeTransform, Pipe } from '@angular/core';
 
 /**
  * Generated class for the ProductFilterComponent component.
@@ -8,7 +9,8 @@ import { Component } from '@angular/core';
  */
 @Component({
   selector: 'product-filter',
-  templateUrl: 'product-filter.html'
+  templateUrl: 'product-filter.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductFilterComponent {
 
@@ -22,6 +24,7 @@ export class ProductFilterComponent {
   productorData: any;
   productors: Array<string>;
   dualPrice: any = { lower: 0, upper: 10000 };
+  appliedFilters: object;
 
   constructor() {
     this.categoryData = [
@@ -43,10 +46,50 @@ export class ProductFilterComponent {
       { text: 'ACME', value: 'acme' },
       { text: 'Scorpio', value: 'scorpio' },
     ];
+    this.clear();
   }
   compareFn(option1: any, option2: any) {
     return option1.value === option2.value;
   }
 
   filterItems(event:Event){}
+
+  delete(key){
+    this.appliedFilters[key] = null
+  }
+
+  clear(){
+    this.appliedFilters = {
+      "contains ":null,
+      "stars >= ":null,
+      "available":null,
+      "category:":"All",
+      "ship":null,
+      "price >":null,
+      "price <":null,
+      "productors":null
+    }
+  }
+  onKeyTextFilter(event: any) { // without type info
+    //this.appliedFilters["contains"] = event.target.value;
+    console.log(event.target.value)
+  }
+
+}
+
+@Pipe({name: 'filters', 'pure':false})
+export class FiltersPipe implements PipeTransform {
+  transform(obj) : any {
+    let filters = [];
+    for (const prop in obj) {
+      if (!obj[prop])
+        continue;
+      var val = (obj[prop]===true) ? "" : ` ${obj[prop]}`
+      filters.push({
+        "plain": `${prop}`,
+        "styled": `${val}`
+      });
+    }
+    return filters;
+  }
 }

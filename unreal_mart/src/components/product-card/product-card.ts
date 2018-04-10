@@ -40,7 +40,6 @@ export class ProductCardComponent {
    }
   }
   openModal() {
-    console.log("open m odal")
     let modal = this.modalCtrl.create(ModalContentPage, {"reviews":this.item.reviews});
     modal.present();
   }

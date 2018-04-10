@@ -6,7 +6,7 @@
             <img src="assets/imgs/user.png"/>
           </ion-avatar>
           <h2>{{ review.name }}</h2>
-          <p>has commented this product</p>
+          <p>commented this product</p>
         </ion-item>
       </ion-col>
       <ion-col col-3 class="badge">
@@ -16,7 +16,7 @@
     <ion-row>
       <ion-col col-8>
         <details>
-          <summary>{{ review.comment | slice:0:10 }}</summary>
+          <summary><strong>{{ review.comment | slice:0:10 }}</strong></summary>
           <p>{{ review.comment  }}</p>
         </details>
       </ion-col>

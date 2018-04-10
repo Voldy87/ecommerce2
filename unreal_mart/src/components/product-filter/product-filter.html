@@ -1,6 +1,6 @@
 <ion-item>
   <ion-label color="primary">Contains</ion-label>
-  <ion-input placeholder="write something here.."></ion-input>
+  <ion-input [(ngModel)]="appliedFilters['contains ']" (keyup)="onKeyTextFilter($event)" placeholder="write something here.."></ion-input>
 </ion-item>
   <ion-segment color="danger" [(ngModel)]="favorites">
     <ion-segment-button value="all">All</ion-segment-button>
@@ -68,7 +68,7 @@
 
     <ion-item>
       <ion-label>Minimum Average Rating</ion-label>
-      <ion-select [(ngModel)]="rating" interface="action-sheet">
+      <ion-select [(ngModel)]="appliedFilters['stars >= ']" interface="action-sheet">
         <ion-option value="1">1 Star</ion-option>
         <ion-option value="2">2 Stars</ion-option>
         <ion-option value="3">3 Stars</ion-option>
@@ -80,13 +80,13 @@
 
   <ion-item-divider color="primary">
       Active filters
-      <button ion-button item-end outline color="light">Clear</button>
+      <button ion-button item-end outline color="light" (click)="clear">Clear</button>
 </ion-item-divider>
 
 <!-- applied filters -->
-<ion-chip #chip1>
-    <ion-label>Default</ion-label>
-    <button ion-button clear (click)="delete(chip1)">
+<ion-chip *ngFor="let f of appliedFilters | filters" >
+    <ion-label>{{ f.plain }} <span>{{ f.styled }}</span> </ion-label>
+    <button ion-button clear (click)="delete(f.plain)">
       <ion-icon name="close-circle"></ion-icon>
     </button>
 </ion-chip>
