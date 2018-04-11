@@ -13,6 +13,7 @@ import { MyApp } from './app.component';
 /*----------------- custom components -------------------*/
 import { ProductCardComponent, ModalContentPage } from '../components/product-card/product-card';
 import { ReviewsModalComponent } from '../components/reviews-modal/reviews-modal';
+import { ModalNativeLangsComponent } from '../components/modal-native-langs/modal-native-langs';
 import { I18nMenuComponent } from '../components/i18n-menu/i18n-menu';
 /*----------------- pages -------------------*/
 import { HomePage } from '../pages/home/home';
@@ -34,6 +35,7 @@ export function createTranslateLoader(http: HttpClient) {
     ProductCardComponent,
     ModalContentPage,
     ReviewsModalComponent,
+    ModalNativeLangsComponent,
     ProductFilterComponent,
     FiltersPipe,
     I18nMenuComponent
@@ -56,7 +58,8 @@ export function createTranslateLoader(http: HttpClient) {
     HomePage,
     ContactPage,
     MainPage,
-    ModalContentPage
+    ModalContentPage,
+    ModalNativeLangsComponent
   ],
   providers: [
     StatusBar,

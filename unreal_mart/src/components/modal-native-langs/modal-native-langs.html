@@ -1,0 +1,13 @@
+<!-- Generated template for the ModalNativeLangsComponent component -->
+<ion-header>
+  <ion-navbar>
+    <ion-title>Select your preferred language</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <div >
+    <h5>Choose one:</h5>
+    <button *ngFor="let o of nativeLangs" ion-button color="danger" full (click)="choseAndDismiss()">{{ o }}</button>
+  </div>
+</ion-content>
+
