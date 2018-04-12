@@ -21,6 +21,7 @@ import { HomePage } from '../pages/home/home';
 import { ContactPage } from '../pages/contact/contact';
 import { MainPage } from '../pages/main/main';
 import { ProductFilterComponent, FiltersPipe } from '../components/product-filter/product-filter';
+import { FooterComponent } from '../components/footer/footer';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,7 +39,8 @@ export function createTranslateLoader(http: HttpClient) {
     ModalNativeLangsComponent,
     ProductFilterComponent,
     FiltersPipe,
-    I18nMenuComponent
+    I18nMenuComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

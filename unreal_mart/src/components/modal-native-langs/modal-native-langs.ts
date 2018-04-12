@@ -11,18 +11,17 @@ import { NavParams, ViewController } from 'ionic-angular';
   templateUrl: 'modal-native-langs.html'
 })
 export class ModalNativeLangsComponent {
-
   nativeLangs:Array<string>
-
   constructor(
     public viewCtrl: ViewController,
     params: NavParams
   ) {
-    this.nativeLangs=params.get('nativeLangs')
+    this.nativeLangs = params.get('nativeLangs')
+  }
+  choseAndDismiss(event: any) {
+    let data = event.target.innerHTML;
+    console.log(data)
+    this.viewCtrl.dismiss(data);
   }
 
-  choseAndDismiss() {
-
-    this.viewCtrl.dismiss();
-  }
 }

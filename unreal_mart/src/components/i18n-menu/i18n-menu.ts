@@ -71,7 +71,7 @@ export class I18nMenuComponent implements OnInit {
   presentActionSheet() {
     this.actionSheet = this.sheetCtrl.create({
       title: 'Select your country',
-      subTitle: 'Then you will be prompted to choose the desired language',
+      subTitle: 'If the case you will be prompted to choose the desired language',
       cssClass: "countryOption_sheet",
       enableBackdropDismiss: false
       //buttons: arr,
@@ -84,12 +84,12 @@ export class I18nMenuComponent implements OnInit {
               this.flag = this.countries[k]["flag"]
               var natives = this.countries[k]["languages"]
               if (natives.length>1){
-                 natives = natives.map(lang => lang["nativeName"])
-                 /*console.log(this.nativeLangs)
-                this.nativeLangs = natives*/
+                natives = natives.map(lang => lang["nativeName"])
                 var myModal = this.modalCtrl.create(ModalNativeLangsComponent, { 'nativeLangs': natives });
                 myModal.present();
-                //this.showLangOptions(natives,this.countries[k]["name"])
+                myModal.onDidDismiss(data => {
+                  this.lang = data;
+                });
               }
               else
                 this.lang = natives[0]["nativeName"]
@@ -98,16 +98,15 @@ export class I18nMenuComponent implements OnInit {
           this.actionSheet.addButton(button)
         }
     this.actionSheet.present().then(() => {
-      this.add_FlagsLangs();
+      this.add_Flags();
     }).catch(error => {
       console.log("error while opening actionsheet page", error);
     });
 
   }
 
-  add_FlagsLangs(){
+  add_Flags(){
     var x = document.querySelectorAll(".countryOption_button .button-effect");
-    console.log(x)
     for (let i = 0; i < x.length; i++) {
       x[i].id = this.countries[i]["name"]
       var parent = x[i].parentNode;
@@ -115,19 +114,6 @@ export class I18nMenuComponent implements OnInit {
       myImage.src = this.countries[i]["flag"];
       myImage.style.marginTop = "5px";
       parent.insertBefore(myImage,x[i])
-      var div = document.createElement("div");
-      div.id = this.countries[i]["name"]
-      div.classList.add("nativeLangs")
-      var span;
-      var langs = this.countries[i]["languages"]
-      for (let j = 0; j < langs.length; j++) {
-        span = document.createElement("span");
-        span.addEventListener( "click", () => this.lang = langs[j]["nativeName"] );
-        span.appendChild(document.createTextNode(langs[j]["nativeName"]));
-        div.appendChild(span)
-      }
-      parent.insertBefore(div,x[i])
-      //div.style.display="None"
     }
   }
 

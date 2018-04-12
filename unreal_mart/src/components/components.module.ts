@@ -4,6 +4,7 @@ import { ReviewsModalComponent } from './reviews-modal/reviews-modal';
 import { ProductFilterComponent } from './product-filter/product-filter';
 import { I18nMenuComponent } from './i18n-menu/i18n-menu';
 import { ModalNativeLangsComponent } from './modal-native-langs/modal-native-langs';
+import { FooterComponent } from './footer/footer';
 @NgModule({
 	declarations: [
     ProductCardComponent,
@@ -11,7 +12,8 @@ import { ModalNativeLangsComponent } from './modal-native-langs/modal-native-lan
     ReviewsModalComponent,
     ProductFilterComponent,
     I18nMenuComponent,
-    ModalNativeLangsComponent],
+    ModalNativeLangsComponent,
+    FooterComponent],
 	imports: [],
 	exports: [
     ProductCardComponent,
@@ -19,6 +21,7 @@ import { ModalNativeLangsComponent } from './modal-native-langs/modal-native-lan
     ReviewsModalComponent,
     ProductFilterComponent,
     I18nMenuComponent,
-    ModalNativeLangsComponent]
+    ModalNativeLangsComponent,
+    FooterComponent]
 })
 export class ComponentsModule {}

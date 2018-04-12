@@ -1,3 +1,18 @@
 modal-native-langs {
-
+  .action-sheet-title {
+    font-size: 2.5rem;
+    color: dodgerblue;
+    font-weight: 500
+  }
+  .action-sheet-sub-title {
+    font-style: italic;
+    margin-top: 1rem;
+  }
+  .button {
+    display: block;
+    padding: 2rem;
+    font-size: 2rem;
+    margin: 2rem;
+    width: 20rem;
+  }
 }
