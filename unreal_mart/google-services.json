@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "192107723452",
+    "firebase_url": "https://website1-3bd93.firebaseio.com",
+    "project_id": "website1-3bd93",
+    "storage_bucket": "website1-3bd93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192107723452:android:36cf93bebefe2ac1",
+        "android_client_info": {
+          "package_name": "tk.voldy87.unrealmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192107723452-ujjqjbfi5atsim4ck15dcgqnteh2vo3v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt9LKEu40LxGPRwtzP5PfCLYSFP9Kkkac"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 i18n-menu {
   button {
     background: transparent;
+    border: none;
   }
   .action-sheet-group{
     overflow: scroll;
@@ -9,7 +10,3 @@ i18n-menu {
 
 }
 
-.nativeLangs:focus{
-    border:3px solid red !important;
-    //display: block;
-  }

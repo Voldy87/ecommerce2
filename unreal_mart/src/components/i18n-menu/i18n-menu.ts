@@ -1,12 +1,10 @@
-import { Component,  OnInit  } from '@angular/core';
+import { Component,  OnInit, Input  } from '@angular/core';
 import { ActionSheetController, Platform, NavController, ModalController } from 'ionic-angular';
 
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import { catchError, retry } from 'rxjs/operators';
 
 import { ModalNativeLangsComponent } from '../modal-native-langs/modal-native-langs';
 
@@ -34,12 +32,16 @@ export class CountryService {
   styles: ['.error {color: red;}']
 })
 export class I18nMenuComponent implements OnInit {
+  @Input() long: boolean;
   countries: Country[];
   flag: string;
   lang: string;
   actionSheet
   nativeLangs=''
-  constructor(private countryService: CountryService, public platform: Platform, public sheetCtrl: ActionSheetController, public nav: NavController, public modalCtrl: ModalController) {
+  constructor(
+    private countryService: CountryService, public platform: Platform,
+    public sheetCtrl: ActionSheetController, public nav: NavController, public modalCtrl: ModalController)
+  {
     this.lang = "English"
     this.flag = "https://restcountries.eu/data/usa.svg"
   }
@@ -48,24 +50,7 @@ export class I18nMenuComponent implements OnInit {
   }
   getCountries(): void {
     this.countryService.getAll()
-    .subscribe(countries => this.countries = countries);
-  }
-
-  setLang() : void {
-    /* var arr = Array()
-    let k;
-    for (k in this.countries ){
-        //console.log(this.countries[k]["languages"])
-        arr.push({
-              "text": this.countries[k]["name"],
-              "cssClass":"countryOption",
-              "handler": (k) => {
-                console.log(k)
-              }
-            })
-      } */
-    this.presentActionSheet()
-
+      .subscribe(countries => this.countries = countries);
   }
 
   presentActionSheet() {
@@ -74,7 +59,6 @@ export class I18nMenuComponent implements OnInit {
       subTitle: 'If the case you will be prompted to choose the desired language',
       cssClass: "countryOption_sheet",
       enableBackdropDismiss: false
-      //buttons: arr,
     });
     for (let k in this.countries ){
           var button = {
@@ -83,6 +67,8 @@ export class I18nMenuComponent implements OnInit {
             "handler": () => {
               this.flag = this.countries[k]["flag"]
               var natives = this.countries[k]["languages"]
+              console.log(this.countries)
+              console.log(k)
               if (natives.length>1){
                 natives = natives.map(lang => lang["nativeName"])
                 var myModal = this.modalCtrl.create(ModalNativeLangsComponent, { 'nativeLangs': natives });

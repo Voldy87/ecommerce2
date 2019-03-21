@@ -1,10 +1,10 @@
 <!-- Generated template for the I18nMenuComponent component -->
-<button ion-button (click)="setLang()">
+<button ion-button (click)="presentActionSheet()">
   <ion-chip>
     <ion-avatar>
       <img [src]="flag">
     </ion-avatar>
-    <ion-label>{{ lang }}</ion-label>
+    <ion-label *ngIf="long">{{ lang }}</ion-label>
   </ion-chip>
 </button>
 

@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController,ActionSheetController, Platform } from 'ionic-angular';
+import { NavController, ActionSheetController, Platform } from 'ionic-angular';
 
 
 import { ContactPage } from '../contact/contact';
 import { MainPage } from '../main/main';
+import { NewsPage } from '../news/news';
+import { FourOFourPage } from '../four-o-four/four-o-four';
 
 @Component({
   selector: 'page-home',
@@ -23,6 +25,12 @@ export class HomePage {
         break;
       case 'main':
         DestPage=MainPage;
+        break;
+      case 'news':
+        DestPage=NewsPage;
+        break;
+      default:
+        DestPage=FourOFourPage;
         break;
     }
     if (root)

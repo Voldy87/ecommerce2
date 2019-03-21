@@ -1,5 +1,32 @@
 page-main {
+  ion-header {
+    text-align: center;
+  }
+  ion-header ion-title.title {
+    padding:0px;
+  }
   ion-footer > ion-title {
     font-size: 1.3rem;
+  }
+  i18n-menu {
+    position: absolute;
+    right: 0;
+    top: -30%;
+  }
+  i18n-menu > * {
+    margin:0 !important;
+  }
+  i18n-menu > .button {
+    background: transparent;
+  }
+  i18n-menu ion-avatar {
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    min-height: 24px;
+  }
+  i18n-menu ion-chip {
+    height: auto !important;
+    margin:0 !important;
   }
 }
